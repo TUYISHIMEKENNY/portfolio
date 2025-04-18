@@ -1,0 +1,19 @@
+{
+  "title": "ZairBus&Sell",
+  "description": "E-Commerce Web",
+  "category": "fullstack",
+  "imagePath": "/uploads/images/ad9fdb27-7957-445e-9828-401cec7c994f.gif",
+  "liveUrl": "https://zaribuysell.com",
+  "githubUrl": "https://github.cm/NGOMA301",
+  "featured": true,
+  "status": "upcoming",
+  "technologies": [
+    "Nodejs",
+    "React + Vite",
+    "Tailwindcss",
+    "MongoDB"
+  ],
+  "id": "7ba036ff-6297-4dfa-a1d1-cbf6d5f7ac9c",
+  "createdAt": "2025-04-18T16:52:11.380Z",
+  "updatedAt": "2025-04-18T16:54:22.299Z"
+}
