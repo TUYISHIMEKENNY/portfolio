@@ -1,5 +1,35 @@
 [
   {
+    "id": "1b23b2e5-6d84-4358-b0ea-9e600430dfb8",
+    "type": "created",
+    "entityType": "blog",
+    "entityId": "640676c4-9147-4cd5-bee7-c0bf7278f0c9",
+    "entityTitle": "10 Tips for First-Time Home Buyers in 2023",
+    "timestamp": "2025-08-22T14:05:08.844Z",
+    "userName": "John Doe"
+  },
+  {
+    "id": "fc6a3097-94c5-48c6-8974-2b187980713a",
+    "type": "uploaded",
+    "entityType": "project",
+    "entityId": "image",
+    "entityTitle": "500602699_1217602653362050_512180828101200127_n.jpg",
+    "timestamp": "2025-08-22T14:05:06.258Z",
+    "userName": "John Doe"
+  },
+  {
+    "id": "114d0e77-fafb-4718-beec-ba9da392d837",
+    "type": "[object Object]",
+    "timestamp": "2025-08-22T13:37:48.526Z",
+    "userName": "John Doe"
+  },
+  {
+    "id": "419f20a4-c364-4527-8f22-089222998d52",
+    "type": "[object Object]",
+    "timestamp": "2025-08-22T10:42:48.326Z",
+    "userName": "John Doe"
+  },
+  {
     "id": "b95694fb-6acc-40ac-904f-893872a0e722",
     "type": "updated",
     "entityType": "project",

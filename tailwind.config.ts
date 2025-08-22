@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -33,6 +33,7 @@ const config = {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -52,6 +53,18 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        markdown: {
+          link: "hsl(var(--markdown-link))",
+          "link-hover": "hsl(var(--markdown-link-hover))",
+          "code-bg": "hsl(var(--markdown-code-bg))",
+          "code-text": "hsl(var(--markdown-code-text))",
+          "pre-bg": "hsl(var(--markdown-pre-bg))",
+          border: "hsl(var(--markdown-border))",
+          "blockquote-border": "hsl(var(--markdown-blockquote-border))",
+          "blockquote-bg": "hsl(var(--markdown-blockquote-bg))",
+          "table-border": "hsl(var(--markdown-table-border))",
+          "table-header-bg": "hsl(var(--markdown-table-header-bg))",
         },
       },
       borderRadius: {
@@ -83,6 +96,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

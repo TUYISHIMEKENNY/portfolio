@@ -1,475 +1,485 @@
-"use client"
-
-import { useEffect, useState } from "react"
+import type { Metadata } from "next"
+import { getAllItems, getItemById } from "@/lib/file-storage"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { ArrowLeft, Calendar, Clock, Facebook, Linkedin, Twitter, ArrowRight } from "lucide-react"
-import AOS from "aos"
-import "aos/dist/aos.css"
-import { useRouter } from "next/navigation"
-import { Skeleton } from "@/components/ui/skeleton"
-import React from "react"
+import { ArrowLeft, Calendar, Clock, Facebook, Linkedin, Twitter, ArrowRight, Share2, ChevronRight } from "lucide-react"
+import { parseMarkdown } from "@/lib/markdown"
+import { notFound } from "next/navigation"
+import { TableOfContents } from "@/components/table-of-contents"
+import { addIdsToHeadings, extractTableOfContents } from "@/lib/table-of-contents"
 
-export default function BlogPostPage({ params }) {
-  // Unwrap params using React.use()
-  const unwrappedParams = React.use(params)
-  const postId = unwrappedParams.id
+interface BlogPostPageProps {
+  params: { id: string }
+}
 
-  const [post, setPost] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const router = useRouter()
-
-  // Set page title dynamically
-  useEffect(() => {
-    if (post?.title) {
-      document.title = `${post.title} | Ngoma Benjamin`
-    }
-  }, [post?.title])
-
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: false,
-    })
-
-    // Scroll to top on page load
-    window.scrollTo(0, 0)
-
-    // Fetch the blog post by id
-    const fetchPost = async () => {
-      try {
-        // First try to get all posts
-        const response = await fetch("/api/blog")
-        if (!response.ok) {
-          throw new Error("Failed to fetch blog posts")
-        }
-
-        const posts = await response.json()
-
-        // Try to find the post by ID first, then by slug if it's a string
-        const foundPost = posts.find((p) => p.id === postId || (typeof postId === "string" && p.slug === postId))
-
-        if (foundPost) {
-          setPost(foundPost)
-
-          // Add structured data for SEO
-          addStructuredData(foundPost)
-        } else {
-          // If not found, use a placeholder post
-          setPost({
-            id: 2,
-            slug: "understanding-react-hooks-a-comprehensive-guide",
-            title: "Understanding React Hooks: A Comprehensive Guide",
-            excerpt:
-              "A deep dive into React Hooks, exploring how they work and how to use them effectively in your applications.",
-            image: "/placeholder.svg?height=600&width=1200&text=React+Hooks",
-            date: "April 22, 2023",
-            readTime: "12 min read",
-            author: "Ngoma Benjamin",
-            authorImage: "/placeholder.svg?height=100&width=100&text=NB",
-            authorBio:
-              "Founder of 301Inc and full-stack developer with a passion for React and modern web technologies.",
-            category: "react",
-            tags: ["React", "JavaScript", "Hooks", "Frontend"],
-            featured: true,
-            content: `
-              <h2>Introduction to React Hooks</h2>
-              <p>React Hooks were introduced in React 16.8 as a way to use state and other React features without writing a class. They enable you to use state and other React features in functional components, making your code more concise and easier to understand.</p>
-              
-              <p>Before Hooks, if you wanted to add state to a component, you had to use a class component. With Hooks, you can add state to functional components, which are simpler and more lightweight.</p>
-              
-              <h2>Why Hooks?</h2>
-              <p>The React team introduced Hooks to solve several problems they had observed in React codebases over the years:</p>
-              
-              <ul>
-                <li><strong>Reusing stateful logic between components was difficult</strong>. Patterns like render props and higher-order components tried to solve this, but they made the code harder to follow.</li>
-                <li><strong>Complex components became hard to understand</strong>. Lifecycle methods often contained unrelated logic, while related logic was split across different methods.</li>
-                <li><strong>Classes confused both people and machines</strong>. They can be a barrier to learning React and can lead to bugs and inconsistencies.</li>
-              </ul>
-              
-              <h2>The Basic Hooks</h2>
-              
-              <h3>useState</h3>
-              <p>The useState Hook lets you add state to functional components. It returns a pair: the current state value and a function that lets you update it.</p>
-              
-              <pre><code>
-              import React, { useState } from 'react';
-              
-              function Counter() {
-                const [count, setCount] = useState(0);
-                
-                return (
-                  <div>
-                    <p>You clicked {count} times</p>
-                    <button onClick={() => setCount(count + 1)}>
-                      Click me
-                    </button>
-                  </div>
-                );
-              }
-              </code></pre>
-              
-              <h3>useEffect</h3>
-              <p>The useEffect Hook lets you perform side effects in functional components. It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes, but unified into a single API.</p>
-              
-              <pre><code>
-              import React, { useState, useEffect } from 'react';
-              
-              function Example() {
-                const [count, setCount] = useState(0);
-                
-                // Similar to componentDidMount and componentDidUpdate:
-                useEffect(() => {
-                  // Update the document title using the browser API
-                  document.title = \`You clicked \${count} times\`;
-                });
-                
-                return (
-                  <div>
-                    <p>You clicked {count} times</p>
-                    <button onClick={() => setCount(count + 1)}>
-                      Click me
-                    </button>
-                  </div>
-                );
-              }
-              </code></pre>
-            `,
-            relatedPosts: [
-              {
-                id: 1,
-                slug: "10-essential-tips-for-modern-web-development",
-                title: "10 Essential Tips for Modern Web Development",
-                excerpt:
-                  "Discover the most important practices and tools that every web developer should know in today's fast-paced development environment.",
-                image: "/placeholder.svg?height=200&width=300&text=Web+Dev+Tips",
-                category: "Development",
-              },
-              {
-                id: 5,
-                slug: "introduction-to-typescript-for-javascript-developers",
-                title: "Introduction to TypeScript for JavaScript Developers",
-                excerpt:
-                  "A beginner-friendly guide to TypeScript, explaining how it enhances JavaScript and improves developer experience.",
-                image: "/placeholder.svg?height=200&width=300&text=TypeScript",
-                category: "JavaScript",
-              },
-              {
-                id: 7,
-                slug: "getting-started-with-nextjs-the-react-framework",
-                title: "Getting Started with Next.js: The React Framework",
-                excerpt:
-                  "An introduction to Next.js, explaining its benefits and how to build your first application with this powerful React framework.",
-                image: "/placeholder.svg?height=200&width=300&text=Next.js",
-                category: "React",
-              },
-            ],
-          })
-        }
-      } catch (error) {
-        console.error("Error fetching blog post:", error)
-        setError(error.message)
-      } finally {
-        setLoading(false)
+// Generate metadata for SEO
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  try {
+    const post = await getItemById("blog", params.id)
+    
+    if (!post) {
+      return {
+        title: "Blog Post Not Found | Ngoma Benjamin",
+        description: "The requested blog post could not be found."
       }
     }
 
-    fetchPost()
-  }, [postId, router])
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ngomabenjamin.com"
+    const postUrl = `${baseUrl}/blog/${post.id || post.slug}`
+    const imageUrl = post.imagePath || post.image || `${baseUrl}/og-blog-default.jpg`
 
-  // Add structured data for SEO
-  const addStructuredData = (post) => {
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: post.title,
-      description: post.excerpt,
-      image: post.imagePath || post.image,
-      datePublished: post.date,
-      dateModified: post.updatedAt || post.date,
-      author: {
-        "@type": "Person",
-        name: post.author || "Ngoma Benjamin",
-        url: `${process.env.WEB_BASE_URL}/about`,
+    return {
+      title: `${post.title} | Ngoma Benjamin - Web Development Blog`,
+      description: post.excerpt || post.description || `Read ${post.title} by Ngoma Benjamin. Expert insights on web development, programming, and technology.`,
+      keywords: [
+        post.title.toLowerCase(),
+        ...(post.tags || []),
+        post.category?.toLowerCase(),
+        "ngoma benjamin",
+        "web development",
+        "programming",
+        "technology blog",
+        "software engineering",
+        "full stack development"
+      ].filter(Boolean),
+      authors: [{ name: post.author || "Ngoma Benjamin" }],
+      creator: post.author || "Ngoma Benjamin",
+      publisher: "Ngoma Benjamin",
+      openGraph: {
+        title: post.title,
+        description: post.excerpt || post.description,
+        type: "article",
+        url: postUrl,
+        siteName: "Ngoma Benjamin",
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: post.title
+          }
+        ],
+        publishedTime: post.date || post.createdAt,
+        modifiedTime: post.updatedAt || post.date || post.createdAt,
+        authors: [post.author || "Ngoma Benjamin"],
+        section: post.category,
+        tags: post.tags
       },
-      publisher: {
-        "@type": "Person",
-        name: "Ngoma Benjamin",
-        logo: {
-          "@type": "ImageObject",
-          url: `${process.env.WEB_BASE_URL}/logo.png`,
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.excerpt || post.description,
+        images: [imageUrl],
+        creator: "@ngoma301"
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
         },
       },
-      mainEntityOfPage: {
-        "@type": "WebPage",
-        "@id": `${process.env.WEB_BASE_URL}/blog/${post.id || post.slug}`,
+      alternates: {
+        canonical: postUrl
       },
-      keywords: post.tags ? post.tags.join(", ") : "",
+      other: {
+        'article:author': post.author || "Ngoma Benjamin",
+        'article:published_time': post.date || post.createdAt,
+        'article:modified_time': post.updatedAt || post.date || post.createdAt,
+        'article:section': post.category,
+        'article:tag': post.tags?.join(', ')
+      }
     }
-
-    // Add the structured data to the page
-    const script = document.createElement("script")
-    script.type = "application/ld+json"
-    script.text = JSON.stringify(structuredData)
-    document.head.appendChild(script)
+  } catch (error) {
+    return {
+      title: "Blog Post | Ngoma Benjamin",
+      description: "Read the latest insights on web development and programming."
+    }
   }
+}
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-8 flex items-center">
-            <Skeleton className="h-8 w-24" />
-          </div>
-
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                <Skeleton className="h-6 w-20" />
-                <Skeleton className="h-6 w-16" />
-                <Skeleton className="h-6 w-24" />
-              </div>
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-6 w-3/4" />
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Skeleton className="h-10 w-10 rounded-full" />
-                  <Skeleton className="h-4 w-24" />
-                </div>
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-4 w-24" />
-              </div>
-            </div>
-
-            <Skeleton className="aspect-video h-[400px] w-full rounded-xl" />
-
-            <div className="space-y-4">
-              <Skeleton className="h-8 w-1/2" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-8 w-1/3" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+// Generate static params for static generation
+export async function generateStaticParams() {
+  try {
+    const posts = await getAllItems("blog")
+    return posts.map((post) => ({
+      id: post.slug || post.id
+    }))
+  } catch (error) {
+    return []
   }
+}
 
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-20">
-        <div className="mx-auto max-w-4xl rounded-lg border border-destructive p-8 text-center">
-          <h1 className="text-2xl font-bold text-destructive">Error Loading Blog Post</h1>
-          <p className="mt-4">{error}</p>
-          <Link href="/blog" className="mt-6 inline-block">
-            <Button>Return to Blog</Button>
-          </Link>
-        </div>
-      </div>
-    )
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  let post
+  
+  try {
+    post = await getItemById("blog", params.id)
+  } catch (error) {
+    console.error("Error fetching blog post:", error)
   }
 
   if (!post) {
-    return (
-      <div className="container mx-auto px-4 py-20">
-        <div className="mx-auto max-w-4xl rounded-lg border p-8 text-center">
-          <h1 className="text-2xl font-bold">Blog Post Not Found</h1>
-          <p className="mt-4">The blog post you're looking for doesn't exist or has been removed.</p>
-          <Link href="/blog" className="mt-6 inline-block">
-            <Button>Return to Blog</Button>
-          </Link>
-        </div>
-      </div>
-    )
+    notFound()
   }
 
-  return (
-    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-      <div className="mx-auto max-w-4xl">
-        <Link href="/blog" className="mb-8 inline-flex items-center text-sm font-medium" data-aos="fade-up">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Blog
-        </Link>
+  // Get related posts
+  const allPosts = await getAllItems("blog")
+  const relatedPosts = allPosts
+    .filter(p => 
+      p.id !== post.id && 
+      (p.category === post.category || 
+       p.tags?.some(tag => post.tags?.includes(tag)))
+    )
+    .slice(0, 3)
 
-        <article className="space-y-8">
-          <div className="space-y-4" data-aos="fade-up">
-            <div className="flex flex-wrap gap-2">
-              <Badge className="capitalize">{post.category}</Badge>
-              {post.tags &&
-                post.tags.map((tag, index) => (
-                  <Badge key={index} variant="outline">
+  // Generate structured data for SEO
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ngomabenjamin.com"
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt || post.description,
+    image: {
+      "@type": "ImageObject",
+      url: post.imagePath || post.image || `${baseUrl}/og-blog-default.jpg`,
+      width: 1200,
+      height: 630
+    },
+    datePublished: post.date || post.createdAt,
+    dateModified: post.updatedAt || post.date || post.createdAt,
+    author: {
+      "@type": "Person",
+      name: post.author || "Ngoma Benjamin",
+      url: `${baseUrl}/about`,
+      image: `${baseUrl}/author-avatar.jpg`
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Ngoma Benjamin",
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/logo.png`,
+        width: 200,
+        height: 60
+      }
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/blog/${post.id || post.slug}`
+    },
+    keywords: post.tags?.join(", ") || "",
+    articleSection: post.category,
+    wordCount: post.content?.split(/\s+/).length || 0,
+    timeRequired: `PT${post.readTime || "5M"}`,
+    inLanguage: "en-US",
+    isAccessibleForFree: true,
+    creativeWorkStatus: "Published"
+  }
+
+  // Parse the markdown content
+  const parsedContent = parseMarkdown(post.content || "")
+  const contentWithIds = addIdsToHeadings(post.content || "")
+  
+  // Extract table of contents
+  const tocItems = extractTableOfContents(contentWithIds)
+
+  return (
+    <>
+      <script 
+        type="application/ld+json" 
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} 
+      />
+      
+      <div className="flex flex-col min-h-screen">
+        {/* Hero Section */}
+        <section className="relative h-[400px] md:h-[500px] w-full">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 z-10" />
+          <Image
+            src={post.imagePath || post.image || "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=1920&h=500&fit=crop"}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+            unoptimized={post.imagePath?.startsWith("/uploads/")}
+          />
+          <div className="container relative z-20 flex h-full flex-col justify-end pb-12">
+            <Link 
+              href="/blog" 
+              className="mb-6 inline-flex items-center text-white/80 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Blog
+            </Link>
+            
+            <div className="max-w-4xl">
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Badge className="bg-primary text-primary-foreground">{post.category}</Badge>
+                {post.tags?.slice(0, 3).map((tag, index) => (
+                  <Badge key={index} variant="secondary" className="bg-white/20 text-white border-white/30">
                     {tag}
                   </Badge>
                 ))}
-            </div>
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{post.title}</h1>
-            <p className="text-xl text-muted-foreground">{post.excerpt}</p>
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="h-10 w-10 overflow-hidden rounded-full">
-                  <Image
-                    src={post.authorImage || "/placeholder.svg?height=40&width=40&text=NB"}
-                    alt={post.author || "Ngoma Benjamin"}
-                    width={40}
-                    height={40}
-                    unoptimized={post.authorImage?.startsWith("/uploads/")}
-                  />
-                </div>
-                <span>{post.author || "Ngoma Benjamin"}</span>
               </div>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span className="text-sm">{post.date}</span>
-              </div>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span className="text-sm">{post.readTime}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="aspect-video relative overflow-hidden rounded-xl" data-aos="fade-up">
-            <Image
-              src={post.imagePath || post.image || "/placeholder.svg?height=600&width=1200&text=Blog+Post"}
-              alt={post.title}
-              fill
-              className="object-cover"
-              unoptimized={post.imagePath?.startsWith("/uploads/")}
-              priority
-            />
-          </div>
-
-          <div
-            className="prose prose-lg max-w-none dark:prose-invert"
-            data-aos="fade-up"
-            dangerouslySetInnerHTML={{ __html: formatContent(post.content) }}
-          />
-
-          <Separator className="my-8" />
-
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between" data-aos="fade-up">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 overflow-hidden rounded-full">
-                <Image
-                  src={post.authorImage || "/placeholder.svg?height=48&width=48&text=NB"}
-                  alt={post.author || "Ngoma Benjamin"}
-                  width={48}
-                  height={48}
-                  unoptimized={post.authorImage?.startsWith("/uploads/")}
-                />
-              </div>
-              <div>
-                <p className="font-semibold">{post.author || "Ngoma Benjamin"}</p>
-                <p className="text-sm text-muted-foreground">
-                  {post.authorBio || "Founder of 301Inc and full-stack developer with a passion for web technologies."}
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2">
               
-              <Button variant="outline" size="icon" aria-label="Share on Twitter">
-                <Twitter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" aria-label="Share on Facebook">
-                <Facebook className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" aria-label="Share on LinkedIn">
-                <Linkedin className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </article>
-
-        {post.relatedPosts && (
-          <section className="mt-16">
-            <h2 className="mb-8 text-2xl font-bold" data-aos="fade-up">
-              Related Articles
-            </h2>
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {post.relatedPosts.map((relatedPost, index) => (
-                <Card key={relatedPost.id} className="overflow-hidden" data-aos="fade-up" data-aos-delay={index * 100}>
-                  <div className="aspect-video relative">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+                {post.title}
+              </h1>
+              
+              <p className="text-lg md:text-xl text-white/90 mb-6 max-w-3xl">
+                {post.excerpt}
+              </p>
+              
+              <div className="flex flex-wrap items-center gap-6 text-white/80">
+                <div className="flex items-center gap-3">
+                  <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white/20">
                     <Image
-                      src={relatedPost.image || "/placeholder.svg"}
-                      alt={relatedPost.title}
+                      src={post.authorImage || "https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"}
+                      alt={post.author || "Ngoma Benjamin"}
                       fill
                       className="object-cover"
+                      unoptimized={post.authorImage?.startsWith("/uploads/")}
                     />
                   </div>
-                  <CardContent className="p-6">
-                    <div className="space-y-2">
-                      <Badge className="capitalize">{relatedPost.category}</Badge>
-                      <h3 className="font-bold">{relatedPost.title}</h3>
-                      <p className="text-sm text-muted-foreground">{relatedPost.excerpt}</p>
-                      <Link href={`/blog/${relatedPost.id || relatedPost.slug}`}>
-                        <Button variant="link" className="p-0">
-                          Read More <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
+                  <div>
+                    <p className="font-medium text-white">{post.author || "Ngoma Benjamin"}</p>
+                    <p className="text-sm text-white/70">Founder of 301Inc</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  <span className="text-sm">{post.date}</span>
+                </div>
+                
+                <div className="flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  <span className="text-sm">{post.readTime || "5 min read"}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="container py-12">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-12">
+            {/* Main Content */}
+            <div className="lg:col-span-3">
+              <article className="max-w-none">
+                <div 
+                  className="prose prose-lg max-w-none dark:prose-invert prose-headings:scroll-m-20 prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-7 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-2 prose-blockquote:border-border prose-blockquote:pl-6 prose-blockquote:italic prose-code:relative prose-code:rounded prose-code:bg-muted prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:font-mono prose-code:text-sm prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:bg-muted prose-pre:p-4 prose-ul:my-6 prose-ul:ml-6 prose-ul:list-disc prose-ol:my-6 prose-ol:ml-6 prose-ol:list-decimal prose-li:mt-2 prose-table:w-full prose-th:border prose-th:px-4 prose-th:py-2 prose-th:text-left prose-th:font-bold prose-td:border prose-td:px-4 prose-td:py-2 prose-td:text-left prose-img:rounded-md prose-img:border"
+                  dangerouslySetInnerHTML={{ __html: parsedContent }}
+                />
+              </article>
+
+              <Separator className="my-12" />
+
+              {/* Author Bio & Social Sharing */}
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 rounded-lg bg-muted/50">
+                <div className="flex items-center gap-4">
+                  <div className="relative h-16 w-16 overflow-hidden rounded-full">
+                    <Image
+                      src={post.authorImage || "https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"}
+                      alt={post.author || "Ngoma Benjamin"}
+                      fill
+                      className="object-cover"
+                      unoptimized={post.authorImage?.startsWith("/uploads/")}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">{post.author || "Ngoma Benjamin"}</h3>
+                    <p className="text-muted-foreground">
+                      {post.authorBio || "Founder of 301Inc and full-stack developer with expertise in modern web technologies. Passionate about sharing knowledge and helping developers grow."}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground mr-2">Share:</span>
+                  <Button variant="outline" size="icon" asChild>
+                    <a 
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${baseUrl}/blog/${post.id || post.slug}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Share on Twitter"
+                    >
+                      <Twitter className="h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="icon" asChild>
+                    <a 
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${baseUrl}/blog/${post.id || post.slug}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Share on Facebook"
+                    >
+                      <Facebook className="h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="icon" asChild>
+                    <a 
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${baseUrl}/blog/${post.id || post.slug}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Share on LinkedIn"
+                    >
+                      <Linkedin className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-8">
+              {/* Table of Contents */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Table of Contents</CardTitle>
+                </CardHeader>
+                <CardContent>
+                   <TableOfContents items={tocItems} />
+                </CardContent>
+              </Card>
+
+              {/* Author Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>About the Author</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative h-20 w-20 overflow-hidden rounded-full mb-4">
+                      <Image
+                        src={post.authorImage || "https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"}
+                        alt={post.author || "Ngoma Benjamin"}
+                        fill
+                        className="object-cover"
+                        unoptimized={post.authorImage?.startsWith("/uploads/")}
+                      />
+                    </div>
+                    <h3 className="font-semibold mb-1">{post.author || "Ngoma Benjamin"}</h3>
+                    <p className="text-sm text-muted-foreground mb-3">Founder of 301Inc</p>
+                    <p className="text-sm mb-4">
+                      Full-stack developer with expertise in modern web technologies. 
+                      Passionate about sharing knowledge and helping developers grow.
+                    </p>
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/about">View Profile</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Tags */}
+              {post.tags && post.tags.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Tags</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag, index) => (
+                        <Link key={index} href={`/blog?q=${encodeURIComponent(tag)}`}>
+                          <Badge variant="outline" className="hover:bg-muted cursor-pointer">
+                            {tag}
+                          </Badge>
+                        </Link>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              )}
+
+              {/* Recent Posts */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Posts</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {allPosts.slice(0, 4).map((recentPost, index) => (
+                      <div key={recentPost.id}>
+                        <div className="flex gap-3">
+                          <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
+                            <Image 
+                              src={recentPost.imagePath || recentPost.image || "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=48&h=48&fit=crop"} 
+                              alt={recentPost.title} 
+                              fill 
+                              className="object-cover"
+                              unoptimized={recentPost.imagePath?.startsWith("/uploads/")}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm line-clamp-2 mb-1">
+                              <Link href={`/blog/${recentPost.id || recentPost.slug}`} className="hover:text-primary">
+                                {recentPost.title}
+                              </Link>
+                            </h4>
+                            <p className="text-xs text-muted-foreground">{recentPost.date}</p>
+                          </div>
+                        </div>
+                        {index < 3 && <Separator className="mt-4" />}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </section>
-        )}
+          </div>
+
+          {/* Related Posts */}
+          {relatedPosts.length > 0 && (
+            <section className="mt-16">
+              <h2 className="text-3xl font-bold tracking-tight mb-8">Related Articles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {relatedPosts.map((relatedPost) => (
+                  <Card key={relatedPost.id} className="overflow-hidden group hover:shadow-lg transition-shadow">
+                    <div className="relative h-[200px]">
+                      <Image
+                        src={relatedPost.imagePath || relatedPost.image || "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=400&h=200&fit=crop"}
+                        alt={relatedPost.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        unoptimized={relatedPost.imagePath?.startsWith("/uploads/")}
+                      />
+                      <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
+                        {relatedPost.category}
+                      </Badge>
+                    </div>
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold mb-2 line-clamp-2">{relatedPost.title}</h3>
+                      <p className="text-muted-foreground line-clamp-2 mb-4">{relatedPost.excerpt}</p>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">{relatedPost.author || "Ngoma Benjamin"}</span>
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <Calendar className="h-3 w-3" />
+                          <span>{relatedPost.date}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="p-4 pt-0">
+                      <Button variant="ghost" size="sm" className="ml-auto group-hover:text-primary" asChild>
+                        <Link href={`/blog/${relatedPost.id || relatedPost.slug}`}>
+                          Read More <ChevronRight className="ml-1 h-3 w-3" />
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
-}
-
-// Helper function to properly format content that might be markdown or HTML
-function formatContent(content) {
-  if (!content) return ""
-
-  // Check if content is already HTML (contains HTML tags)
-  const hasHtmlTags = /<\/?[a-z][\s\S]*>/i.test(content)
-
-  if (hasHtmlTags) {
-    return content
-  } else {
-    // Enhanced markdown to HTML conversion for better formatting
-    return (
-      content
-        // Headers
-        .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-        .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-        .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-        // Bold
-        .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
-        // Italic
-        .replace(/\*(.*?)\*/gim, "<em>$1</em>")
-        // Code blocks with syntax highlighting
-        .replace(/```(\w+)?\n([\s\S]*?)```/gim, (match, lang, code) => {
-          return `<pre class="language-${lang || "text"}"><code>${code}</code></pre>`
-        })
-        // Inline code
-        .replace(/`(.*?)`/gim, "<code>$1</code>")
-        // Links - Fix the link pattern to use standard Markdown format
-        .replace(/\[(.*?)\]$$(.*?)$$/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-        // Lists
-        .replace(/^\s*-\s*(.*$)/gim, "<ul><li>$1</li></ul>")
-        .replace(/^\s*\d+\.\s*(.*$)/gim, "<ol><li>$1</li></ol>")
-        // Paragraphs
-        .replace(/^\s*(\n)?(.+)/gim, (m) =>
-          /<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(m) ? m : "<p>" + m + "</p>",
-        )
-        // Line breaks
-        .replace(/\n/gim, "<br>")
-        // Fix nested lists
-        .replace(/<\/ul>\s*<ul>/gim, "")
-        .replace(/<\/ol>\s*<ol>/gim, "")
-        // Images - Fix the image pattern to use standard Markdown format
-        .replace(/!\[(.*?)\]$$(.*?)$$/gim, '<img src="$2" alt="$1" class="rounded-md my-4 max-w-full">')
-    )
-  }
 }

@@ -270,3 +270,6 @@ export async function getActiveResume(): Promise<any | null> {
   const resumes = await getAllItems("resume")
   return resumes.find((resume) => resume.isActive) || (resumes.length > 0 ? resumes[0] : null)
 }
+
+
+

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Prism.js VS Code dark theme */
+@import 'prismjs/themes/prism-tomorrow.css';
+
+
+/* Import KaTeX styles */
+@import 'katex/dist/katex.min.css';
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -24,6 +32,19 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.75rem;
+
+    /* GitHub-inspired markdown colors */
+    --markdown-link: 200 100% 40%;
+    --markdown-link-hover: 200 100% 35%;
+    --markdown-code-bg: 210 14% 93%;
+    --markdown-code-text: 357 79% 65%;
+    --markdown-pre-bg: 210 18% 87%;
+    --markdown-border: 210 18% 87%;
+    --markdown-blockquote-border: 210 18% 78%;
+    --markdown-blockquote-bg: 210 40% 98%;
+    --markdown-table-border: 210 18% 87%;
+    --markdown-table-header-bg: 210 20% 95%;
+
   }
 
   .dark {
@@ -46,6 +67,18 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
+
+     /* Dark mode markdown colors */
+    --markdown-link: 200 100% 70%;
+    --markdown-link-hover: 200 100% 80%;
+    --markdown-code-bg: 220 13% 18%;
+    --markdown-code-text: 25 100% 80%;
+    --markdown-pre-bg: 220 13% 14%;
+    --markdown-border: 217.2 32.6% 17.5%;
+    --markdown-blockquote-border: 217.2 32.6% 25%;
+    --markdown-blockquote-bg: 220 13% 8%;
+    --markdown-table-border: 217.2 32.6% 17.5%;
+    --markdown-table-header-bg: 220 13% 12%;
   }
 }
 
@@ -55,6 +88,405 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* GitHub-style markdown content styles */
+@layer components {
+  .markdown-content {
+    @apply max-w-none;
+    line-height: 1.6;
+    font-size: 16px;
+    color: hsl(var(--foreground));
+  }
+
+  /* Headings */
+  .markdown-content .markdown-heading {
+    @apply font-semibold border-b border-markdown-border pb-2 mb-4 relative;
+    line-height: 1.25;
+  }
+
+  .markdown-content .markdown-h1 {
+    @apply text-3xl mt-8 mb-6;
+  }
+
+  .markdown-content .markdown-h2 {
+    @apply text-2xl mt-6 mb-4;
+  }
+
+  .markdown-content .markdown-h3 {
+    @apply text-xl mt-6 mb-4;
+  }
+
+  .markdown-content .markdown-h4 {
+    @apply text-lg mt-6 mb-4;
+  }
+
+  .markdown-content .markdown-h5 {
+    @apply text-base mt-6 mb-4;
+  }
+
+  .markdown-content .markdown-h6 {
+    @apply text-sm mt-6 mb-4;
+  }
+
+  .markdown-content .markdown-heading-anchor {
+    @apply absolute -left-6 text-markdown-link opacity-0 transition-opacity;
+    text-decoration: none;
+    padding-right: 4px;
+  }
+
+  .markdown-content .markdown-heading:hover .markdown-heading-anchor {
+    @apply opacity-100;
+  }
+
+  /* Links */
+  .markdown-content .markdown-link {
+    @apply text-markdown-link hover:text-markdown-link-hover underline;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* Code */
+  .markdown-content .markdown-code {
+    @apply bg-markdown-code-bg text-markdown-code-text px-1 py-0.5 rounded text-sm;
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  }
+
+  .markdown-content .markdown-code-block {
+    @apply my-4 border border-markdown-border rounded-lg overflow-hidden;
+  }
+
+  .markdown-content .markdown-code-header {
+    @apply flex items-center justify-between bg-markdown-table-header-bg px-4 py-2 border-b border-markdown-border;
+  }
+
+  .markdown-content .markdown-code-language {
+    @apply text-sm font-medium text-muted-foreground;
+  }
+
+  .markdown-content .markdown-copy-button {
+    @apply flex items-center gap-1 px-2 py-1 text-sm bg-background border border-markdown-border rounded hover:bg-accent transition-colors;
+  }
+
+  .markdown-content .markdown-copy-button:hover {
+    @apply bg-accent;
+  }
+
+  .markdown-content .markdown-copy-button svg {
+    @apply w-4 h-4;
+  }
+
+  .markdown-content .markdown-pre {
+    @apply bg-markdown-pre-bg p-4 overflow-x-auto m-0 rounded-none;
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  }
+
+  .markdown-content .markdown-pre code {
+    @apply bg-transparent p-0 text-sm leading-relaxed;
+    font-family: inherit;
+  }
+
+  /* Blockquotes */
+  .markdown-content .markdown-blockquote {
+    @apply border-l-4 border-markdown-blockquote-border bg-markdown-blockquote-bg pl-4 py-2 my-4 italic;
+  }
+
+  .markdown-content .markdown-blockquote p {
+    @apply mb-2 last:mb-0;
+  }
+
+  /* Lists */
+  .markdown-content ul {
+    @apply my-4 pl-6 list-disc;
+    list-style-position: outside;
+  }
+
+  .markdown-content ol {
+    @apply my-4 pl-6 list-decimal;
+    list-style-position: outside;
+  }
+
+  .markdown-content ul ul,
+  .markdown-content ol ol,
+  .markdown-content ul ol,
+  .markdown-content ol ul {
+    @apply mt-2 mb-2;
+  }
+
+  .markdown-content li {
+    @apply mb-2 leading-relaxed;
+  }
+
+  .markdown-content li > p {
+    @apply inline;
+  }
+
+  .markdown-content .markdown-task-item {
+    @apply list-none -ml-6 flex items-start gap-2;
+  }
+
+  .markdown-content .markdown-checkbox {
+    @apply mt-1;
+  }
+
+  .markdown-content .markdown-task-item.checked {
+    @apply text-muted-foreground;
+  }
+
+  .markdown-content .markdown-task-item.checked .markdown-checkbox {
+    @apply accent-primary;
+  }
+
+  /* Tables */
+  .markdown-content .markdown-table-wrapper {
+    @apply overflow-x-auto my-4;
+  }
+
+  .markdown-content .markdown-table {
+    @apply w-full border-collapse border border-markdown-table-border;
+  }
+
+  .markdown-content .markdown-table th {
+    @apply bg-markdown-table-header-bg border border-markdown-table-border px-3 py-2 text-left font-semibold;
+  }
+
+  .markdown-content .markdown-table td {
+    @apply border border-markdown-table-border px-3 py-2;
+  }
+
+  /* Images */
+  .markdown-content img {
+    @apply max-w-full h-auto rounded border border-markdown-border my-4;
+  }
+
+  /* Horizontal rules */
+  .markdown-content hr {
+    @apply border-0 border-t border-markdown-border my-6;
+  }
+
+  /* Paragraphs */
+  .markdown-content p {
+    @apply mb-4 leading-relaxed;
+  }
+
+  /* Text formatting */
+  .markdown-content strong {
+    @apply font-semibold;
+  }
+
+  .markdown-content em {
+    @apply italic;
+  }
+
+  /* First element margin reset */
+  .markdown-content > *:first-child {
+    @apply mt-0;
+  }
+
+  /* Last element margin reset */
+  .markdown-content > *:last-child {
+    @apply mb-0;
+  }
+
+  /* VS Code-like syntax highlighting adjustments */
+  .markdown-pre code[class*="language-"] {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0;
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+  
+  /* Light mode colors */
+  .markdown-pre .token.comment,
+  .markdown-pre .token.prolog,
+  .markdown-pre .token.doctype,
+  .markdown-pre .token.cdata {
+    color: #6a9955;
+  }
+  
+  .markdown-pre .token.punctuation {
+    color: #d4d4d4;
+  }
+  
+  .markdown-pre .token.property,
+  .markdown-pre .token.tag,
+  .markdown-pre .token.boolean,
+  .markdown-pre .token.number,
+  .markdown-pre .token.constant,
+  .markdown-pre .token.symbol {
+    color: #b5cea8;
+  }
+  
+  .markdown-pre .token.selector,
+  .markdown-pre .token.attr-name,
+  .markdown-pre .token.string,
+  .markdown-pre .token.char,
+  .markdown-pre .token.builtin,
+  .markdown-pre .token.inserted {
+    color: #ce9178;
+  }
+  
+  .markdown-pre .token.operator,
+  .markdown-pre .token.entity,
+  .markdown-pre .token.url {
+    color: #d4d4d4;
+  }
+  
+  .markdown-pre .token.atrule,
+  .markdown-pre .token.attr-value,
+  .markdown-pre .token.keyword {
+    color: #569cd6;
+  }
+  
+  .markdown-pre .token.function {
+    color: #dcdcaa;
+  }
+  
+  .markdown-pre .token.class-name {
+    color: #4ec9b0;
+  }
+  
+  .markdown-pre .token.regex,
+  .markdown-pre .token.important,
+  .markdown-pre .token.variable {
+    color: #d16969;
+  }
+  
+  .markdown-pre .token.deleted {
+    color: #ce9178;
+  }
+  
+  /* Dark mode overrides */
+  .dark .markdown-pre .token.comment,
+  .dark .markdown-pre .token.prolog,
+  .dark .markdown-pre .token.doctype,
+  .dark .markdown-pre .token.cdata {
+    color: #6a9955;
+  }
+  
+  .dark .markdown-pre .token.punctuation {
+    color: #d4d4d4;
+  }
+  
+  .dark .markdown-pre .token.property,
+  .dark .markdown-pre .token.tag,
+  .dark .markdown-pre .token.boolean,
+  .dark .markdown-pre .token.number,
+  .dark .markdown-pre .token.constant,
+  .dark .markdown-pre .token.symbol {
+    color: #b5cea8;
+  }
+  
+  .dark .markdown-pre .token.selector,
+  .dark .markdown-pre .token.attr-name,
+  .dark .markdown-pre .token.string,
+  .dark .markdown-pre .token.char,
+  .dark .markdown-pre .token.builtin,
+  .dark .markdown-pre .token.inserted {
+    color: #ce9178;
+  }
+  
+  .dark .markdown-pre .token.operator,
+  .dark .markdown-pre .token.entity,
+  .dark .markdown-pre .token.url {
+    color: #d4d4d4;
+  }
+  
+  .dark .markdown-pre .token.atrule,
+  .dark .markdown-pre .token.attr-value,
+  .dark .markdown-pre .token.keyword {
+    color: #569cd6;
+  }
+  
+  .dark .markdown-pre .token.function {
+    color: #dcdcaa;
+  }
+  
+  .dark .markdown-pre .token.class-name {
+    color: #4ec9b0;
+  }
+  
+  .dark .markdown-pre .token.regex,
+  .dark .markdown-pre .token.important,
+  .dark .markdown-pre .token.variable {
+    color: #d16969;
+  }
+  
+  .dark .markdown-pre .token.deleted {
+    color: #ce9178;
+  }
+
+  /* Math expressions - KaTeX styles */
+  .markdown-content .markdown-math-inline {
+    @apply inline-block;
+  }
+
+  .markdown-content .markdown-math-block {
+    @apply block text-center my-6 overflow-x-auto;
+  }
+
+  /* Mermaid diagrams */
+  .markdown-content .markdown-mermaid-block {
+    @apply flex justify-center items-center my-6 p-4 bg-background rounded-lg border border-markdown-border overflow-auto;
+  }
+
+  .markdown-content .markdown-mermaid-block svg {
+    @apply max-w-full h-auto;
+  }
+
+  /* Dark mode adjustments for Mermaid */
+  .dark .markdown-content .markdown-mermaid-block svg {
+    filter: invert(0.9) hue-rotate(180deg);
+  }
+
+  /* Footnotes */
+  .markdown-content .markdown-footnote-ref a {
+    @apply text-markdown-link no-underline text-sm font-medium;
+  }
+
+  .markdown-content .markdown-footnote-ref a:hover {
+    @apply text-markdown-link-hover underline;
+  }
+
+  .markdown-content .markdown-footnotes {
+    @apply mt-8 pt-6 border-t border-markdown-border;
+  }
+
+  .markdown-content .markdown-footnotes-title {
+    @apply text-lg font-semibold mb-4;
+  }
+
+  .markdown-content .markdown-footnotes-list {
+    @apply text-sm space-y-2;
+  }
+
+  .markdown-content .markdown-footnote {
+    @apply leading-relaxed;
+  }
+
+  .markdown-content .markdown-footnote-backref {
+    @apply ml-2 text-markdown-link no-underline;
+  }
+
+  .markdown-content .markdown-footnote-backref:hover {
+    @apply text-markdown-link-hover;
+  }
+
+  /* Definition Lists */
+  .markdown-content .markdown-definition-list {
+    @apply my-4;
+  }
+
+  .markdown-content .markdown-definition-term {
+    @apply font-semibold mb-1;
+  }
+
+  .markdown-content .markdown-definition-desc {
+    @apply ml-6 mb-3 text-muted-foreground;
   }
 }
 
@@ -97,3 +529,6 @@
 .prose blockquote {
   @apply mt-6 border-l-2 pl-6 italic;
 }
+
+
+
