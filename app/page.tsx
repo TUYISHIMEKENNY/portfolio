@@ -30,9 +30,9 @@ export default function Home() {
             <div className="flex flex-col justify-center space-y-4" data-aos="fade-right">
               <div className="space-y-2">
                 <Badge className="px-3 py-1 text-sm" variant="secondary">
-                  Full-Stack Developer
+                  Full-Stack Web & Mobile App Developer
                 </Badge>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
                   Hi, I'm <span className="text-primary">Ngoma Benjamin</span>
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -40,7 +40,7 @@ export default function Home() {
                   Specializing in modern web technologies and user-centric design.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+              <div className="flex flex-col gap-2 min-[300px]:flex-row">
                 <Link href="/projects">
                   <Button size="lg" className="gap-1">
                     View My Work <ArrowRight className="h-4 w-4" />
@@ -56,7 +56,7 @@ export default function Home() {
             <div className="flex items-center justify-center" data-aos="fade-left">
               <div className="relative h-[350px] w-[350px] overflow-hidden rounded-full border-4 border-primary/20 bg-muted p-2">
                 <Image
-                  src="/placeholder.svg?height=400&width=400"
+                  src="/ngoma-benjamin-passport-img.png"
                   alt="Developer Portrait"
                   fill
                   className="object-cover"

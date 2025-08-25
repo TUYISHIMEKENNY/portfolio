@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm md:flex-col md:space-y-2">
               <li>
                 <Link href="/" className="text-muted-foreground hover:text-foreground">
                   Home
@@ -75,7 +75,7 @@ export default function Footer() {
           </div>
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Legal</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm md:flex-col md:space-y-2">
               <li>
                 <Link href="/privacy-policy" className="text-muted-foreground hover:text-foreground">
                   Privacy Policy

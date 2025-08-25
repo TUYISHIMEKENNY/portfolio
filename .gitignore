@@ -12,6 +12,7 @@
 
 /uploads
 /public/uploads
+/data
 
 # debug
 npm-debug.log*

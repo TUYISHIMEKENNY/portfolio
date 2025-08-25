@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { getAllItems } from "@/lib/file-storage"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, Calendar, Clock, ArrowRight, ChevronRight } from "lucide-react"
+import { Search, Calendar, Clock, ArrowRight, ChevronRight } from 'lucide-react'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -70,9 +71,21 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function BlogPage({ searchParams }: { searchParams?: { q?: string } }) {
-  // Get search query from URL
+interface BlogPageProps {
+  searchParams?: { 
+    q?: string
+    page?: string
+    category?: string
+  }
+}
+
+const POSTS_PER_PAGE = 10
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  // Added pagination and category filtering
   const searchQuery = searchParams?.q || ""
+  const currentPage = parseInt(searchParams?.page || '1', 10)
+  const categoryFilter = searchParams?.category || ""
 
   // Fetch blog posts
   const posts = await getAllItems("blog")
@@ -84,17 +97,32 @@ export default async function BlogPage({ searchParams }: { searchParams?: { q?: 
     return dateB.getTime() - dateA.getTime()
   })
 
-  // Filter posts by search query if present
-  const filteredPosts = searchQuery
-    ? sortedPosts.filter(
-        (post) =>
-          post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
-          post.category?.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
-    : sortedPosts
+  // Filter posts by search query and category
+  let filteredPosts = sortedPosts
+  
+  if (searchQuery) {
+    filteredPosts = filteredPosts.filter(
+      (post) =>
+        post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        post.category?.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+  }
+  
+  if (categoryFilter) {
+    filteredPosts = filteredPosts.filter(
+      (post) => post.category?.toLowerCase() === categoryFilter.toLowerCase()
+    )
+  }
+
+  // Calculate pagination for filtered posts
+  const totalPosts = filteredPosts.length
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE)
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE
+  const endIndex = startIndex + POSTS_PER_PAGE
+  const paginatedPosts = filteredPosts.slice(startIndex, endIndex)
 
   // Get featured posts
   const featuredPosts = sortedPosts.filter((post) => post.featured)
@@ -153,7 +181,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: { q?: 
       <div className="flex flex-col min-h-screen">
         {/* Hero Section */}
         <section className="relative h-[300px] md:h-[400px] w-full">
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/60 z-10" />
           <Image
             src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1920&h=400&fit=crop"
             alt="Web development and programming blog"
@@ -290,11 +318,21 @@ export default async function BlogPage({ searchParams }: { searchParams?: { q?: 
                     ))}
                   </TabsList>
                   <TabsContent value="all">
-                    <BlogPostsList posts={searchQuery ? filteredPosts : sortedPosts.filter((post) => !post.featured || searchQuery)} />
+                    <BlogPostsList 
+                      posts={searchQuery || categoryFilter ? paginatedPosts : sortedPosts.filter((post) => !post.featured || searchQuery)} 
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      searchParams={searchParams}
+                    />
                   </TabsContent>
                   {categories.slice(0, 3).map((category) => (
                     <TabsContent key={category} value={category.toLowerCase()}>
-                      <BlogPostsList posts={filteredPosts.filter((post) => post.category === category)} />
+                      <BlogPostsList 
+                        posts={filteredPosts.filter((post) => post.category === category)} 
+                        currentPage={1}
+                        totalPages={1}
+                        searchParams={searchParams}
+                      />
                     </TabsContent>
                   ))}
                 </Tabs>
@@ -341,7 +379,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: { q?: 
                     {categoriesWithCounts.map((category, index) => (
                       <li key={index}>
                         <Link
-                          href={`/blog?category=${category.name.toLowerCase()}`}
+                          href={`/blog/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
                           className="flex items-center justify-between py-2 hover:text-primary"
                         >
                           <span>{category.name}</span>
@@ -446,9 +484,12 @@ export default async function BlogPage({ searchParams }: { searchParams?: { q?: 
 
 interface BlogPostsListProps {
   posts: any[]
+  currentPage?: number
+  totalPages?: number
+  searchParams?: any
 }
 
-function BlogPostsList({ posts }: BlogPostsListProps) {
+function BlogPostsList({ posts, currentPage = 1, totalPages = 1, searchParams }: BlogPostsListProps) {
   return (
     <div className="space-y-8">
       {posts.map((post) => (
@@ -503,9 +544,47 @@ function BlogPostsList({ posts }: BlogPostsListProps) {
           <p className="text-muted-foreground">No posts found in this category.</p>
         </div>
       )}
-      {posts.length > 6 && (
+      {totalPages > 1 && (
         <div className="flex justify-center mt-8">
-          <Button variant="outline">Load More Articles</Button>
+          <Pagination>
+            <PaginationContent>
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href={`/blog?${new URLSearchParams({
+                      ...searchParams,
+                      page: (currentPage - 1).toString()
+                    }).toString()}`}
+                  />
+                </PaginationItem>
+              )}
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink 
+                    href={`/blog?${new URLSearchParams({
+                      ...searchParams,
+                      page: page.toString()
+                    }).toString()}`}
+                    isActive={page === currentPage}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              
+              {currentPage < totalPages && (
+                <PaginationItem>
+                  <PaginationNext 
+                    href={`/blog?${new URLSearchParams({
+                      ...searchParams,
+                      page: (currentPage + 1).toString()
+                    }).toString()}`}
+                  />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
         </div>
       )}
     </div>

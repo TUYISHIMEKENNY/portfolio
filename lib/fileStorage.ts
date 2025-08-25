@@ -113,7 +113,7 @@ Git is an essential tool for modern web development. Learn to use it effectively
 
 ### Git Best Practices
 
-- [ ] Write clear, descriptive commit messages
+- [x] Write clear, descriptive commit messages
 - [ ] Use branching strategies (Git Flow, GitHub Flow)
 - [ ] Make small, focused commits
 - [ ] Use pull requests for code review

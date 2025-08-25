@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, Bold, Italic, LinkIcon, List, ListOrdered, Plus, Upload, X } from "lucide-react"
+import { MarkdownContentWithCopy } from "@/components/MarkdownContentWithCopy"
 import AOS from "aos"
 import "aos/dist/aos.css"
 
@@ -388,7 +389,7 @@ export default function NewBlogPostPage() {
                       <Button
                         type="button"
                         variant="outline"
-                        className="mt-4"
+                        className="mt-4 bg-transparent"
                         onClick={() => document.getElementById("image").click()}
                       >
                         Select Image
@@ -406,7 +407,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-8 w-8 bg-transparent"
                       onClick={() => insertFormatting("bold")}
                       title="Bold"
                     >
@@ -416,7 +417,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-8 w-8 bg-transparent"
                       onClick={() => insertFormatting("italic")}
                       title="Italic"
                     >
@@ -426,7 +427,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-8 w-8 bg-transparent"
                       onClick={() => insertFormatting("link")}
                       title="Link"
                     >
@@ -436,7 +437,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-8 w-8 bg-transparent"
                       onClick={() => insertFormatting("ul")}
                       title="Bullet List"
                     >
@@ -446,7 +447,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-8 w-8 bg-transparent"
                       onClick={() => insertFormatting("ol")}
                       title="Numbered List"
                     >
@@ -456,7 +457,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-8"
+                      className="h-8 bg-transparent"
                       onClick={() => insertFormatting("h2")}
                       title="Heading 2"
                     >
@@ -466,7 +467,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-8"
+                      className="h-8 bg-transparent"
                       onClick={() => insertFormatting("h3")}
                       title="Heading 3"
                     >
@@ -476,7 +477,7 @@ export default function NewBlogPostPage() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-8"
+                      className="h-8 bg-transparent"
                       onClick={() => insertFormatting("code")}
                       title="Code Block"
                     >
@@ -502,8 +503,8 @@ export default function NewBlogPostPage() {
               {postData.content && (
                 <div className="space-y-2 border-t pt-6">
                   <Label>Content Preview</Label>
-                  <div className="prose prose-sm max-w-none rounded-md border bg-muted/50 p-4 dark:prose-invert">
-                    <div dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(postData.content) }} />
+                  <div className="rounded-md border bg-muted/50 p-4">
+                    <MarkdownContentWithCopy content={postData.content} />
                   </div>
                 </div>
               )}
@@ -517,7 +518,7 @@ export default function NewBlogPostPage() {
                 <Button type="submit" disabled={isSubmitting} className="flex-1">
                   {isSubmitting ? "Creating..." : "Publish Post"}
                 </Button>
-                <Button type="button" variant="outline" className="flex-1">
+                <Button type="button" variant="outline" className="flex-1 bg-transparent">
                   Save as Draft
                 </Button>
               </div>
@@ -527,38 +528,4 @@ export default function NewBlogPostPage() {
       </div>
     </div>
   )
-}
-
-// Improved markdown to HTML converter for preview
-function convertMarkdownToHtml(markdown) {
-  if (!markdown) return ""
-
-  let html = markdown
-    // Headers
-    .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-    .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-    .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-    // Bold
-    .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
-    // Italic
-    .replace(/\*(.*?)\*/gim, "<em>$1</em>")
-    // Code blocks
-    .replace(/```([\s\S]*?)```/gim, "<pre><code>$1</code></pre>")
-    // Inline code
-    .replace(/`(.*?)`/gim, "<code>$1</code>")
-    // Links
-    .replace(/\[(.*?)\]$$(.*?)$$/gim, '<a href="$2">$1</a>')
-    // Lists
-    .replace(/^\s*-\s*(.*$)/gim, "<ul><li>$1</li></ul>")
-    .replace(/^\s*\d+\.\s*(.*$)/gim, "<ol><li>$1</li></ol>")
-    // Paragraphs
-    .replace(/^\s*(\n)?(.+)/gim, (m) => (/<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(m) ? m : "<p>" + m + "</p>"))
-    // Line breaks
-    .replace(/\n/gim, "<br>")
-
-  // Fix nested lists
-  html = html.replace(/<\/ul>\s*<ul>/gim, "")
-  html = html.replace(/<\/ol>\s*<ol>/gim, "")
-
-  return html
 }

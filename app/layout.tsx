@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   keywords: [
     "Ngoma Benjamin",
     "ngoma301",
-    "301Inc",
+    "301LLc",
     "kwangoma",
     "301",
     "301 pictures presents",

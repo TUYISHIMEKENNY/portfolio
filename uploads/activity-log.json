@@ -1,5 +1,38 @@
 [
   {
+    "id": "ece44dd6-65e4-44e3-a37e-f11b67302e16",
+    "type": "created",
+    "entityType": "blog",
+    "entityId": "f46a0d42-ee46-4554-a7ef-457a8550810f",
+    "entityTitle": "Ultimate XSS Attack Guide: Learn Cross-Site Scripting from Zero to Hero + Prevention Tips",
+    "timestamp": "2025-08-24T13:11:41.125Z",
+    "userName": "John Doe"
+  },
+  {
+    "id": "3f252ced-1669-4919-90a5-96fdfe03fae8",
+    "type": "uploaded",
+    "entityType": "project",
+    "entityId": "image",
+    "entityTitle": "XSS Attacks_ The Next Wave _ Snyk.jpg",
+    "timestamp": "2025-08-24T13:11:38.520Z",
+    "userName": "John Doe"
+  },
+  {
+    "id": "f047db20-bb78-4fcd-a020-464b7eb155c6",
+    "type": "uploaded",
+    "entityType": "resume",
+    "entityId": "13d2ca82-dfe2-4058-8da6-afc3e3a52453",
+    "entityTitle": "ngoma-benjamin-resume",
+    "timestamp": "2025-08-22T18:55:25.926Z",
+    "userName": "John Doe"
+  },
+  {
+    "id": "c4496ab5-bb0c-46a3-8937-a05f00b19f00",
+    "type": "[object Object]",
+    "timestamp": "2025-08-22T18:45:02.790Z",
+    "userName": "John Doe"
+  },
+  {
     "id": "1b23b2e5-6d84-4358-b0ea-9e600430dfb8",
     "type": "created",
     "entityType": "blog",
