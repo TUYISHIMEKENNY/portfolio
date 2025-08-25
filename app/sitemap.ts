@@ -48,6 +48,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/search`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: "yearly",
@@ -95,5 +101,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...routes, ...blogPostsRoutes, ...projectsRoutes]
+  const categories = Array.from(new Set(blogPosts.map((post) => post.category).filter(Boolean)))
+  const categoryRoutes = categories.map((category) => ({
+    url: `${baseUrl}/blog/category/${category.toLowerCase().replace(/\s+/g, "-")}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }))
+
+  return [...routes, ...blogPostsRoutes, ...projectsRoutes, ...categoryRoutes]
 }
