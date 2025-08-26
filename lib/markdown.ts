@@ -27,7 +27,7 @@ import 'prismjs/components/prism-yaml';
 export const configureMarked = () => {
   marked.setOptions({
     gfm: true,
-    breaks: true,
+    breaks: false,
   });
   
   // Initialize Mermaid

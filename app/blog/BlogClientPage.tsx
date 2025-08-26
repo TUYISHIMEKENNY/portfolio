@@ -338,59 +338,17 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
               {!searchQuery && featuredPosts.length > 0 && (
                 <section className="mb-12">
                   <h2 className="text-3xl font-bold tracking-tight mb-6">Featured Articles</h2>
-                  <div className="grid grid-cols-1 gap-8">
-                    {featuredPosts.slice(0, 1).map((post) => (
-                      <Card key={post.id} className="overflow-hidden">
-                        <div className="relative h-[400px]">
-                          <Image
-                            src={
-                              post.imagePath ||
-                              post.image ||
-                              "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop" ||
-                              "/placeholder.svg" ||
-                              "/placeholder.svg"
-                            }
-                            alt={post.title}
-                            fill
-                            className="object-cover"
-                            unoptimized={post.imagePath?.startsWith("/uploads/")}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          <div className="absolute bottom-0 left-0 p-6 text-white">
-                            <Badge className="mb-3 bg-primary text-primary-foreground">{post.category}</Badge>
-                            <h3 className="text-2xl font-bold mb-2">{post.title}</h3>
-                            <p className="text-white/80 mb-4 line-clamp-2">{post.excerpt}</p>
-                            <div className="flex items-center gap-4">
-                              <span>{post.author || "Ngoma Benjamin"}</span>
-                              <div className="flex items-center gap-1">
-                                <Calendar className="h-4 w-4" />
-                                <span>{post.date}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-4 w-4" />
-                                <span>{post.readTime || "5 min read"}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <CardFooter className="p-4 bg-muted/30">
-                          <Button asChild className="w-full">
-                            <Link href={`/blog/${post.id || post.slug}`}>
-                              Read Full Article <ArrowRight className="ml-2 h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    ))}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {featuredPosts.slice(1, 3).map((post) => (
-                        <Card key={post.id} className="overflow-hidden">
-                          <div className="relative h-[200px]">
+                  <div className="overflow-x-auto pb-4">
+                    <div className="flex gap-6 w-max">
+                      {featuredPosts.map((post) => (
+                        <Card key={post.id} className="overflow-hidden flex-shrink-0 w-[320px] md:w-[400px]">
+                          <div className="relative h-[240px]">
                             <Image
                               src={
                                 post.imagePath ||
                                 post.image ||
-                                "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=600&h=200&fit=crop" ||
+                                "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop" ||
+                                "/placeholder.svg" ||
                                 "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
@@ -399,25 +357,24 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
                               className="object-cover"
                               unoptimized={post.imagePath?.startsWith("/uploads/")}
                             />
-                            <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
-                              {post.category}
-                            </Badge>
-                          </div>
-                          <CardContent className="p-6">
-                            <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-                            <p className="text-muted-foreground line-clamp-2 mb-4">{post.excerpt}</p>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">{post.author || "Ngoma Benjamin"}</span>
-                              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                <Calendar className="h-3 w-3" />
-                                <span>{post.date}</span>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                            <div className="absolute bottom-0 left-0 p-4 text-white">
+                              <Badge className="mb-2 bg-primary text-primary-foreground">{post.category}</Badge>
+                              <h3 className="text-lg font-bold mb-1 line-clamp-2">{post.title}</h3>
+                              <p className="text-white/80 mb-2 line-clamp-2 text-sm">{post.excerpt}</p>
+                              <div className="flex items-center gap-2 text-xs">
+                                <span>{post.author || "Ngoma Benjamin"}</span>
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="h-3 w-3" />
+                                  <span>{post.date}</span>
+                                </div>
                               </div>
                             </div>
-                          </CardContent>
-                          <CardFooter className="p-4 pt-0">
-                            <Button variant="ghost" size="sm" className="ml-auto" asChild>
+                          </div>
+                          <CardFooter className="p-3 bg-muted/30">
+                            <Button asChild size="sm" className="w-full">
                               <Link href={`/blog/${post.id || post.slug}`}>
-                                Read More <ChevronRight className="ml-1 h-3 w-3" />
+                                Read Article <ArrowRight className="ml-2 h-3 w-3" />
                               </Link>
                             </Button>
                           </CardFooter>
@@ -555,6 +512,7 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
                                 post.image ||
                                 "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=64&h=64&fit=crop" ||
                                 "/placeholder.svg" ||
+                                "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
                               alt={post.title}
@@ -623,60 +581,117 @@ interface BlogPostsListProps {
 
 function BlogPostsList({ posts, currentPage = 1, totalPages = 1, searchParams }: BlogPostsListProps) {
   return (
-    <div className="space-y-8">
-      {posts.map((post) => (
-        <article key={post.id} className="flex flex-col md:flex-row gap-6 border-b pb-8">
-          <div className="relative h-[200px] md:h-[180px] md:w-[280px] overflow-hidden rounded-lg">
-            <Image
-              src={
-                post.imagePath ||
-                post.image ||
-                "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=280&h=180&fit=crop" ||
-                "/placeholder.svg" ||
-                "/placeholder.svg"
-              }
-              alt={post.title}
-              fill
-              className="object-cover"
-              unoptimized={post.imagePath?.startsWith("/uploads/")}
-            />
-            <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">{post.category}</Badge>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-bold mb-2">
-              <Link href={`/blog/${post.id || post.slug}`} className="hover:text-primary">
-                {post.title}
-              </Link>
-            </h3>
-            <p className="text-muted-foreground mb-4">{post.excerpt}</p>
-            <div className="flex flex-wrap items-center gap-4 text-sm">
-              <span>{post.author || "Ngoma Benjamin"}</span>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span>{post.date}</span>
+    <div className="space-y-6">
+      {posts.map((post, index) => {
+        // Alternate between landscape and compact (Reddit-style) layouts
+        const isLandscape = index % 3 === 0
+
+        if (isLandscape) {
+          return (
+            <article
+              key={post.id}
+              className="flex flex-col md:flex-row gap-4 border rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              <div className="relative h-[200px] md:h-[160px] md:w-[240px] overflow-hidden rounded-lg flex-shrink-0">
+                <Image
+                  src={
+                    post.imagePath ||
+                    post.image ||
+                    "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=240&h=160&fit=crop" ||
+                    "/placeholder.svg" ||
+                    "/placeholder.svg"
+                  }
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  unoptimized={post.imagePath?.startsWith("/uploads/")}
+                />
+                <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">
+                  {post.category}
+                </Badge>
               </div>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>{post.readTime || "5 min read"}</span>
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-bold mb-2 line-clamp-2">
+                    <Link href={`/blog/${post.id || post.slug}`} className="hover:text-primary">
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="text-muted-foreground mb-3 line-clamp-2">{post.excerpt}</p>
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-3 text-sm">
+                    <span>{post.author || "Ngoma Benjamin"}</span>
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <Calendar className="h-3 w-3" />
+                      <span>{post.date}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      <span>{post.readTime || "5 min read"}</span>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href={`/blog/${post.id || post.slug}`}>
+                      Read More <ChevronRight className="ml-1 h-3 w-3" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
-            </div>
-            {post.tags && post.tags.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {post.tags.slice(0, 3).map((tag: string, index: number) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {tag}
+            </article>
+          )
+        } else {
+          // Reddit-style compact layout
+          return (
+            <article key={post.id} className="flex gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
+              <div className="relative h-16 w-16 md:h-20 md:w-20 overflow-hidden rounded-md flex-shrink-0">
+                <Image
+                  src={
+                    post.imagePath ||
+                    post.image ||
+                    "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop" ||
+                    "/placeholder.svg" ||
+                    "/placeholder.svg"
+                  }
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  unoptimized={post.imagePath?.startsWith("/uploads/")}
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <Badge variant="secondary" className="text-xs flex-shrink-0">
+                    {post.category}
                   </Badge>
-                ))}
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
+                    <Calendar className="h-3 w-3" />
+                    <span>{post.date}</span>
+                  </div>
+                </div>
+                <h3 className="font-semibold text-sm md:text-base line-clamp-2 mb-1">
+                  <Link href={`/blog/${post.id || post.slug}`} className="hover:text-primary">
+                    {post.title}
+                  </Link>
+                </h3>
+                <p className="text-muted-foreground text-xs md:text-sm line-clamp-1 mb-2">{post.excerpt}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{post.author || "Ngoma Benjamin"}</span>
+                    <span>•</span>
+                    <span>{post.readTime || "5 min read"}</span>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" asChild>
+                    <Link href={`/blog/${post.id || post.slug}`}>
+                      Read <ChevronRight className="ml-1 h-3 w-3" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
-            )}
-            <Button variant="ghost" size="sm" className="mt-4" asChild>
-              <Link href={`/blog/${post.id || post.slug}`}>
-                Read More <ChevronRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </article>
-      ))}
+            </article>
+          )
+        }
+      })}
       {posts.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">No posts found in this category.</p>

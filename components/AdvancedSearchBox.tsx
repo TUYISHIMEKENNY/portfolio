@@ -158,7 +158,7 @@ export default function AdvancedSearchBox({
       if (onSearch) {
         onSearch(trimmedQuery)
       } else {
-        router.push(`/blog?q=${encodeURIComponent(trimmedQuery)}`)
+        router.push(`/search?q=${encodeURIComponent(trimmedQuery)}`)
       }
     },
     [recentSearches, onSearch, router],
@@ -217,7 +217,12 @@ export default function AdvancedSearchBox({
     if (onSearch) {
       onSearch("")
     } else {
-      router.push("/blog")
+      const currentPath = window.location.pathname
+      if (currentPath.includes("/search")) {
+        router.push("/search")
+      } else {
+        router.push("/blog")
+      }
     }
   }
 

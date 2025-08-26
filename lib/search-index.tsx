@@ -36,6 +36,9 @@ export interface SearchResult {
     id: string
   }>
   similarityReasons?: string[]
+  searchType?: "exact_title_match" | "title_match" | "heading_match" | "content_match" | "general_match"
+  relevanceScore?: number
+  readingTime?: number
 }
 
 const SEARCH_INDEX_PATH = path.join(process.cwd(), "uploads", "search-index.json")
@@ -190,46 +193,43 @@ export async function searchPosts(
       const snippets: SearchResult["snippets"] = []
       const matchedHeadings: SearchResult["matchedHeadings"] = []
 
-      // Title match (highest priority)
-      if (indexEntry.title.toLowerCase().includes(queryLower)) {
+      const titleLower = indexEntry.title.toLowerCase()
+      if (titleLower === queryLower) {
+        score += 200 // Exact title match gets highest priority
+        matchType = "title"
+      } else if (titleLower.includes(queryLower)) {
         score += 100
         matchType = "title"
       }
 
-      // Category match
       if (indexEntry.category.toLowerCase().includes(queryLower)) {
         score += 50
         matchType = "category"
       }
 
-      // Tags match
       const tagMatch = indexEntry.tags.some((tag) => tag.toLowerCase().includes(queryLower))
       if (tagMatch) {
         score += 40
         matchType = "tags"
       }
 
-      // Content match with snippet extraction
-      const contentSnippets = extractSnippets(indexEntry.content, queryLower)
+      const contentSnippets = extractEnhancedSnippets(indexEntry.content, queryLower)
       if (contentSnippets.length > 0) {
         score += contentSnippets.length * 10
         snippets.push(...contentSnippets)
       }
 
-      // Heading matches
       const headingMatches = indexEntry.headings.filter((heading) => heading.text.toLowerCase().includes(queryLower))
       if (headingMatches.length > 0) {
         score += headingMatches.length * 30
         matchedHeadings.push(...headingMatches)
       }
 
-      // Keyword match
       const keywordMatch = indexEntry.keywords.some((keyword) => keyword.includes(queryLower))
       if (keywordMatch) {
         score += 20
       }
 
-      // Apply filters
       if (options.category && indexEntry.category !== options.category) {
         continue
       }
@@ -239,23 +239,25 @@ export async function searchPosts(
         if (!hasMatchingTag) continue
       }
 
-      // Only include results with some relevance
       if (score > 0) {
-        // Get the full post data
         const post = await getPostFromIndex(indexEntry.id)
         if (post) {
+          const readingTime = Math.ceil(indexEntry.wordCount / 200) // Average reading speed
+          const relevanceScore = Math.min((score / 200) * 100, 100) // Normalize to 0-100
+
           results.push({
             post,
             score,
             matchType,
             snippets: snippets.slice(0, 3), // Limit snippets
             matchedHeadings,
+            readingTime,
+            relevanceScore,
           })
         }
       }
     }
 
-    // Sort by score (highest first) and apply limit
     results.sort((a, b) => b.score - a.score)
 
     if (options.limit) {
@@ -269,7 +271,7 @@ export async function searchPosts(
   }
 }
 
-function extractSnippets(
+function extractEnhancedSnippets(
   content: string,
   query: string,
 ): Array<{
@@ -278,34 +280,42 @@ function extractSnippets(
   context: string
 }> {
   const snippets: Array<{ text: string; highlighted: string; context: string }> = []
-  const sentences = content.split(/[.!?]+/)
+
+  const paragraphs = content.split(/\n\s*\n/)
   const queryRegex = new RegExp(`(${escapeRegex(query)})`, "gi")
 
-  for (const sentence of sentences) {
-    if (sentence.toLowerCase().includes(query)) {
-      const trimmed = sentence.trim()
-      if (trimmed.length > 20) {
-        const highlighted = trimmed.replace(queryRegex, "<mark>$1</mark>")
+  for (const paragraph of paragraphs) {
+    if (paragraph.toLowerCase().includes(query)) {
+      const sentences = paragraph.split(/[.!?]+/)
 
-        // Get surrounding context (previous and next sentences)
-        const sentenceIndex = sentences.indexOf(sentence)
-        const contextStart = Math.max(0, sentenceIndex - 1)
-        const contextEnd = Math.min(sentences.length - 1, sentenceIndex + 1)
-        const context = sentences
-          .slice(contextStart, contextEnd + 1)
-          .join(". ")
-          .trim()
+      for (const sentence of sentences) {
+        if (sentence.toLowerCase().includes(query)) {
+          const trimmed = sentence.trim()
+          if (trimmed.length > 20) {
+            const highlighted = trimmed.replace(queryRegex, "<mark>$1</mark>")
 
-        snippets.push({
-          text: trimmed,
-          highlighted,
-          context: context.length > 200 ? context.substring(0, 200) + "..." : context,
-        })
+            const sentenceIndex = sentences.indexOf(sentence)
+            const contextStart = Math.max(0, sentenceIndex - 1)
+            const contextEnd = Math.min(sentences.length - 1, sentenceIndex + 1)
+            const context = sentences
+              .slice(contextStart, contextEnd + 1)
+              .join(". ")
+              .trim()
+
+            const finalContext = context.length > 300 ? context.substring(0, 300) + "..." : context
+
+            snippets.push({
+              text: trimmed,
+              highlighted,
+              context: finalContext,
+            })
+          }
+        }
       }
     }
   }
 
-  return snippets.slice(0, 5) // Limit to 5 snippets per post
+  return snippets.slice(0, 5)
 }
 
 function escapeRegex(string: string): string {
@@ -344,26 +354,21 @@ export async function getSearchSuggestions(query: string, limit = 5): Promise<st
 
     if (queryLower.length < 2) return []
 
-    // Collect suggestions from titles, categories, tags, and keywords
     for (const entry of searchIndex) {
-      // Title suggestions
       if (entry.title.toLowerCase().includes(queryLower)) {
         suggestions.add(entry.title)
       }
 
-      // Category suggestions
       if (entry.category.toLowerCase().includes(queryLower)) {
         suggestions.add(entry.category)
       }
 
-      // Tag suggestions
       entry.tags.forEach((tag) => {
         if (tag.toLowerCase().includes(queryLower)) {
           suggestions.add(tag)
         }
       })
 
-      // Keyword suggestions
       entry.keywords.forEach((keyword) => {
         if (keyword.includes(queryLower) && keyword.length > queryLower.length) {
           suggestions.add(keyword)
@@ -383,19 +388,15 @@ export async function getRelatedSearches(query: string, limit = 8): Promise<stri
     const results = await searchPosts(query, { limit: 5 })
     const relatedTerms = new Set<string>()
 
-    // Get terms from search results
     for (const result of results) {
-      // Add category as related search
       if (result.post.category) {
         relatedTerms.add(result.post.category)
       }
 
-      // Add tags as related searches
       if (result.post.tags) {
         result.post.tags.forEach((tag: string) => relatedTerms.add(tag))
       }
 
-      // Add keywords from highly relevant posts
       if (result.score > 50 && result.post.keywords) {
         result.post.keywords.slice(0, 3).forEach((keyword: string) => {
           if (keyword.length > 3 && !keyword.includes(query.toLowerCase())) {
@@ -405,11 +406,9 @@ export async function getRelatedSearches(query: string, limit = 8): Promise<stri
       }
     }
 
-    // Add semantic variations of the query
     const semanticVariations = generateSemanticVariations(query)
     semanticVariations.forEach((variation) => relatedTerms.add(variation))
 
-    // Remove the original query from related terms
     relatedTerms.delete(query)
     relatedTerms.delete(query.toLowerCase())
 
@@ -436,14 +435,11 @@ export async function getIntelligentSuggestions(
 
     if (queryLower.length < 2) return []
 
-    // Context-aware scoring
     const categoryBoost = context.currentCategory ? 20 : 0
     const recentBoost = 15
     const preferenceBoost = 10
 
-    // Collect suggestions with intelligent scoring
     for (const entry of searchIndex) {
-      // Title suggestions with context
       if (entry.title.toLowerCase().includes(queryLower)) {
         let score = 30
         if (context.currentCategory === entry.category) score += categoryBoost
@@ -457,7 +453,6 @@ export async function getIntelligentSuggestions(
         })
       }
 
-      // Category suggestions with boost for current context
       if (entry.category.toLowerCase().includes(queryLower)) {
         let score = 25
         if (context.currentCategory === entry.category) score += categoryBoost
@@ -468,7 +463,6 @@ export async function getIntelligentSuggestions(
         })
       }
 
-      // Tag suggestions with preference boost
       entry.tags.forEach((tag) => {
         if (tag.toLowerCase().includes(queryLower)) {
           let score = 20
@@ -481,7 +475,6 @@ export async function getIntelligentSuggestions(
         }
       })
 
-      // Keyword suggestions with relevance scoring
       entry.keywords.forEach((keyword) => {
         if (keyword.includes(queryLower) && keyword.length > queryLower.length) {
           const score = 15 + (keyword.length - queryLower.length) * 2
@@ -494,7 +487,6 @@ export async function getIntelligentSuggestions(
       })
     }
 
-    // Convert to array and sort by score
     const sortedSuggestions = Array.from(suggestions.entries())
       .map(([text, data]) => ({ text, ...data }))
       .sort((a, b) => b.score - a.score)
@@ -511,12 +503,9 @@ export async function getTrendingSearches(
   limit = 5,
 ): Promise<Array<{ query: string; count: number; category?: string }>> {
   try {
-    // This would typically come from analytics data
-    // For now, we'll generate based on popular categories and tags
     const searchIndex = await getSearchIndex()
     const trending = new Map<string, { count: number; category?: string }>()
 
-    // Count category popularity
     const categoryCount = new Map<string, number>()
     const tagCount = new Map<string, number>()
 
@@ -529,7 +518,6 @@ export async function getTrendingSearches(
       })
     })
 
-    // Add popular categories as trending
     Array.from(categoryCount.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3)
@@ -537,7 +525,6 @@ export async function getTrendingSearches(
         trending.set(category, { count, category })
       })
 
-    // Add popular tags as trending
     Array.from(tagCount.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, limit - 3)
@@ -570,34 +557,29 @@ export async function getSimilarPosts(postId: string, limit = 5): Promise<Search
       let score = 0
       const reasons: string[] = []
 
-      // Category similarity (high weight)
       if (post.category === targetPost.category) {
         score += 40
         reasons.push(`Same category: ${post.category}`)
       }
 
-      // Tag similarity (medium-high weight)
       const commonTags = post.tags.filter((tag) => targetPost.tags.includes(tag))
       if (commonTags.length > 0) {
         score += commonTags.length * 15
         reasons.push(`Common tags: ${commonTags.join(", ")}`)
       }
 
-      // Keyword similarity (medium weight)
       const commonKeywords = post.keywords.filter((keyword) => targetPost.keywords.includes(keyword))
       if (commonKeywords.length > 0) {
         score += Math.min(commonKeywords.length * 5, 25)
         reasons.push(`Similar topics`)
       }
 
-      // Title similarity (medium weight)
       const titleSimilarity = calculateTextSimilarity(post.title, targetPost.title)
       if (titleSimilarity > 0.3) {
         score += titleSimilarity * 20
         reasons.push(`Similar title`)
       }
 
-      // Content length similarity (low weight)
       const lengthRatio =
         Math.min(post.wordCount, targetPost.wordCount) / Math.max(post.wordCount, targetPost.wordCount)
       if (lengthRatio > 0.5) {
@@ -610,11 +592,9 @@ export async function getSimilarPosts(postId: string, limit = 5): Promise<Search
       }
     }
 
-    // Sort by similarity score and get top results
     similarities.sort((a, b) => b.score - a.score)
     const topSimilar = similarities.slice(0, limit)
 
-    // Convert to SearchResult format
     const results: SearchResult[] = []
     for (const similar of topSimilar) {
       const post = await getPostFromIndex(similar.postId)
@@ -651,7 +631,6 @@ function generateSemanticVariations(query: string): string[] {
   const variations: string[] = []
   const queryLower = query.toLowerCase()
 
-  // Common programming term variations
   const synonyms: Record<string, string[]> = {
     javascript: ["js", "ecmascript", "node"],
     react: ["reactjs", "react.js"],
@@ -666,7 +645,6 @@ function generateSemanticVariations(query: string): string[] {
     advanced: ["expert", "pro", "deep-dive"],
   }
 
-  // Add synonyms
   Object.entries(synonyms).forEach(([key, values]) => {
     if (queryLower.includes(key)) {
       values.forEach((synonym) => {
@@ -678,7 +656,6 @@ function generateSemanticVariations(query: string): string[] {
     }
   })
 
-  // Add common suffixes
   if (!queryLower.includes("tutorial") && !queryLower.includes("guide")) {
     variations.push(`${query} tutorial`)
     variations.push(`${query} guide`)

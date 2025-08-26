@@ -66,7 +66,18 @@ const config = {
           "table-border": "hsl(var(--markdown-table-border))",
           "table-header-bg": "hsl(var(--markdown-table-header-bg))",
         },
+
+        "search-highlight": "hsl(var(--search-highlight))",
+        "search-match-bg": "hsl(var(--search-match-bg))",
+        "search-suggestion-hover": "hsl(var(--search-suggestion-hover))",
+        "search-filter-bg": "hsl(var(--search-filter-bg))",
+        "search-result-border": "hsl(var(--search-result-border))",
+
       },
+
+        
+
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

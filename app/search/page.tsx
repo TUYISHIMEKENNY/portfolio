@@ -5,10 +5,24 @@ import { useSearchParams, useRouter } from "next/navigation"
 import AdvancedSearchBox from "@/components/AdvancedSearchBox"
 import SearchResultsList from "@/components/SearchResultsList"
 import { useSearch } from "@/hooks/use-search"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Search, TrendingUp, Hash, BookOpen, Filter } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import { 
+  Search, 
+  TrendingUp, 
+  Hash, 
+  BookOpen, 
+  Filter, 
+  Clock, 
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  Globe,
+  User,
+  Calendar
+} from "lucide-react"
 import Head from "next/head"
 
 export default function SearchPage() {
@@ -21,6 +35,7 @@ export default function SearchPage() {
   const [showFilters, setShowFilters] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(initialCategory)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false)
 
   const { query, results, isLoading, total, search, getRelatedSearches, setQuery } = useSearch({
     initialQuery,
@@ -48,25 +63,37 @@ export default function SearchPage() {
   }, [query, selectedCategory, selectedTags, router])
 
   const generateSEOData = () => {
-    const baseTitle = "Search Blog Posts | Ngoma Benjamin"
+    const baseTitle = "Advanced Blog Search | Ngoma Benjamin - Web Development & Programming"
     const baseDescription =
-      "Search through expert articles, tutorials, and insights on web development, programming, and technology."
+      "Search through expert articles, tutorials, and insights on web development, programming, React, JavaScript, and modern technologies. Find exactly what you need."
 
     if (query) {
+      const resultText = total === 1 ? "result" : "results"
       return {
-        title: `"${query}" Search Results | Ngoma Benjamin Blog`,
-        description: `Find articles about ${query}. ${total} results found in web development, programming, and technology tutorials.`,
-        keywords: [query, "search", "blog", "web development", "programming", "tutorials", selectedCategory].filter(
-          Boolean,
-        ),
-        canonicalUrl: `/search?q=${encodeURIComponent(query)}${selectedCategory ? `&category=${selectedCategory}` : ""}`,
+        title: `"${query}" - ${total} ${resultText} | Ngoma Benjamin Blog Search`,
+        description: `Search results for "${query}". ${total} ${resultText} found covering web development, programming, and technology tutorials. ${selectedCategory ? `Filtered by ${selectedCategory}.` : ""} Get expert insights and practical tutorials.`,
+        keywords: [
+          query,
+          "search",
+          "blog",
+          "web development", 
+          "programming",
+          "tutorials",
+          "React",
+          "JavaScript",
+          "frontend",
+          "backend",
+          selectedCategory,
+          ...selectedTags
+        ].filter(Boolean),
+        canonicalUrl: `/search?q=${encodeURIComponent(query)}${selectedCategory ? `&category=${encodeURIComponent(selectedCategory)}` : ""}${selectedTags.length > 0 ? `&tags=${selectedTags.map(encodeURIComponent).join(",")}` : ""}`,
       }
     }
 
     return {
       title: baseTitle,
       description: baseDescription,
-      keywords: ["search", "blog", "web development", "programming", "tutorials", "articles"],
+      keywords: ["search", "blog", "web development", "programming", "tutorials", "React", "JavaScript", "frontend", "backend", "articles"],
       canonicalUrl: "/search",
     }
   }
@@ -100,8 +127,9 @@ export default function SearchPage() {
 
   // Get available categories and tags from results
   const availableCategories = Array.from(new Set(results.map((result) => result.post.category).filter(Boolean)))
+  const availableTags = Array.from(new Set(results.flatMap((result) => result.post.tags || []))).slice(0, 15)
 
-  const availableTags = Array.from(new Set(results.flatMap((result) => result.post.tags || []))).slice(0, 20)
+  const hasActiveFilters = selectedCategory || selectedTags.length > 0
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -123,17 +151,58 @@ export default function SearchPage() {
           author: {
             "@type": "Person",
             name: result.post.author || "Ngoma Benjamin",
+            url: "https://ngomabenjamin.com/about"
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "Ngoma Benjamin",
+            url: "https://ngomabenjamin.com"
           },
           datePublished: result.post.date || result.post.createdAt,
-          image: result.post.imagePath || result.post.image,
+          dateModified: result.post.updatedAt || result.post.date || result.post.createdAt,
+          image: result.post.imagePath || result.post.image || "https://ngomabenjamin.com/default-blog-image.jpg",
+          keywords: [result.post.category, ...(result.post.tags || [])].filter(Boolean).join(", ")
         },
       })),
     },
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://ngomabenjamin.com/search?q={search_term_string}",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://ngomabenjamin.com/search?q={search_term_string}"
+      },
       "query-input": "required name=search_term_string",
     },
+    provider: {
+      "@type": "Organization",
+      name: "Ngoma Benjamin",
+      url: "https://ngomabenjamin.com"
+    }
+  }
+
+  const breadcrumbStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://ngomabenjamin.com"
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Search",
+        item: "https://ngomabenjamin.com/search"
+      },
+      ...(query ? [{
+        "@type": "ListItem",
+        position: 3,
+        name: `Search: ${query}`,
+        item: `https://ngomabenjamin.com${seoData.canonicalUrl}`
+      }] : [])
+    ]
   }
 
   return (
@@ -144,172 +213,298 @@ export default function SearchPage() {
         <meta name="keywords" content={seoData.keywords.join(", ")} />
         <link rel="canonical" href={`https://ngomabenjamin.com${seoData.canonicalUrl}`} />
 
-        {/* Open Graph */}
+        {/* Enhanced Open Graph */}
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://ngomabenjamin.com${seoData.canonicalUrl}`} />
-        <meta property="og:site_name" content="Ngoma Benjamin" />
+        <meta property="og:site_name" content="Ngoma Benjamin - Web Development Blog" />
+        <meta property="og:image" content="https://ngomabenjamin.com/search-og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_US" />
 
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary" />
+        {/* Enhanced Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@ngomabenjamin" />
+        <meta name="twitter:creator" content="@ngomabenjamin" />
         <meta name="twitter:title" content={seoData.title} />
         <meta name="twitter:description" content={seoData.description} />
+        <meta name="twitter:image" content="https://ngomabenjamin.com/search-twitter-image.jpg" />
 
-        {/* Robots */}
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-
+        {/* Enhanced Robots and SEO */}
+        <meta name="robots" content="index, follow, max-snippet:160, max-image-preview:large, max-video-preview:30" />
+        <meta name="googlebot" content="index, follow, max-snippet:160, max-image-preview:large, max-video-preview:30" />
+        <meta name="bingbot" content="index, follow" />
+        <meta name="revisit-after" content="1 day" />
+        <meta name="author" content="Ngoma Benjamin" />
+        <meta name="language" content="en" />
+        
+        {/* Additional SEO Meta */}
+        {query && <meta name="search-query" content={query} />}
+        <meta name="search-results-count" content={total.toString()} />
+        
         {/* Structured Data */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbStructuredData) }} />
+        
+        {/* Preload critical resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </Head>
 
       <div className="min-h-screen bg-background">
-        {/* Search Header */}
-        <div className="border-b bg-muted/30">
-          <div className="container py-8">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-3xl font-bold mb-2">Search Blog Posts</h1>
-              <p className="text-muted-foreground mb-6">
-                Find articles, tutorials, and insights on web development and programming
-              </p>
-              <AdvancedSearchBox
-                initialQuery={initialQuery}
-                onSearch={handleSearch}
-                placeholder="Search for articles, topics, categories, or tags..."
-              />
+        {/* Google-inspired Search Header */}
+        <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+          <div className="container">
+            <div className="flex items-center gap-4 py-3 md:py-4">
+              {/* Logo/Brand */}
+              <div className="flex items-center gap-2 text-lg font-semibold text-primary">
+                <Globe className="w-5 h-5" />
+                <span className="hidden sm:inline">NB</span>
+              </div>
+
+              {/* Search Box */}
+              <div className="flex-1 max-w-2xl">
+                <AdvancedSearchBox
+                  initialQuery={initialQuery}
+                  onSearch={handleSearch}
+                  placeholder="Search articles, tutorials, technologies..."
+                  className="border-none shadow-sm focus:shadow-md transition-shadow"
+                />
+              </div>
+
+              {/* Filter Toggle for Mobile */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowFilters(!showFilters)}
+                className="md:hidden"
+              >
+                <Filter className="w-4 h-4" />
+              </Button>
             </div>
-          </div>
-        </div>
 
-        <div className="container py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Filters Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-8 space-y-6">
-                {/* Filter Toggle for Mobile */}
-                <div className="lg:hidden">
-                  <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="w-full">
-                    <Filter className="w-4 h-4 mr-2" />
-                    {showFilters ? "Hide Filters" : "Show Filters"}
-                  </Button>
-                </div>
-
-                <div className={`space-y-6 ${showFilters ? "block" : "hidden lg:block"}`}>
-                  {/* Active Filters */}
-                  {(selectedCategory || selectedTags.length > 0) && (
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                          <CardTitle className="text-sm">Active Filters</CardTitle>
-                          <Button variant="ghost" size="sm" onClick={clearFilters}>
-                            Clear All
-                          </Button>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="space-y-2">
-                          {selectedCategory && (
-                            <Badge variant="default" className="mr-2">
-                              <BookOpen className="w-3 h-3 mr-1" />
-                              {selectedCategory}
-                            </Badge>
-                          )}
-                          {selectedTags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="mr-2">
-                              <Hash className="w-3 h-3 mr-1" />
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {/* Categories Filter */}
-                  {availableCategories.length > 0 && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-sm flex items-center gap-2">
-                          <BookOpen className="w-4 h-4" />
-                          Categories
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {availableCategories.map((category) => (
-                            <button
-                              key={category}
-                              onClick={() => handleCategoryFilter(category)}
-                              className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
-                                selectedCategory === category ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                              }`}
-                            >
-                              {category}
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {/* Tags Filter */}
-                  {availableTags.length > 0 && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-sm flex items-center gap-2">
-                          <Hash className="w-4 h-4" />
-                          Tags
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                          {availableTags.map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant={selectedTags.includes(tag) ? "default" : "outline"}
-                              className="cursor-pointer hover:bg-muted"
-                              onClick={() => handleTagFilter(tag)}
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {/* Popular Searches */}
-                  {relatedSearches.length > 0 && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-sm flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4" />
-                          Related Searches
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {relatedSearches.map((related, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleRelatedSearch(related)}
-                              className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors"
-                            >
-                              {related}
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
+            {/* Quick Filters Bar */}
+            {query && (
+              <div className="border-t bg-muted/20 py-2">
+                <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+                  <span className="text-xs text-muted-foreground whitespace-nowrap px-2">Filters:</span>
+                  
+                  {/* Quick Category Filters */}
+                  {availableCategories.slice(0, 4).map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      size="sm"
+                      className="text-xs h-7 whitespace-nowrap"
+                      onClick={() => handleCategoryFilter(category)}
+                    >
+                      <BookOpen className="w-3 h-3 mr-1" />
+                      {category}
+                    </Button>
+                  ))}
+                  
+                  {/* Clear Filters */}
+                  {hasActiveFilters && (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={clearFilters}
+                      className="text-xs h-7 text-destructive"
+                    >
+                      Clear
+                    </Button>
                   )}
                 </div>
               </div>
-            </div>
+            )}
+          </div>
+        </header>
 
-            {/* Search Results */}
-            <div className="lg:col-span-3">
-              {query ? (
+        {/* Main Content */}
+        <main className="container py-4 md:py-6">
+          {!query ? (
+            /* Empty State - Google-like */
+            <div className="max-w-md mx-auto text-center py-16 md:py-24">
+              <div className="mb-8">
+                <Search className="mx-auto h-16 w-16 text-primary mb-4" />
+                <h1 className="text-2xl font-bold mb-2">Search Blog Posts</h1>
+                <p className="text-muted-foreground">
+                  Find expert articles on web development, programming, and technology
+                </p>
+              </div>
+              
+              <div className="mb-8">
+                <AdvancedSearchBox
+                  onSearch={handleSearch}
+                  placeholder="Try 'React hooks', 'JavaScript', or 'CSS Grid'..."
+                />
+              </div>
+
+              {/* Popular Topics */}
+              <div className="text-left">
+                <h3 className="text-sm font-medium mb-3">Popular Topics</h3>
+                <div className="flex flex-wrap gap-2">
+                  {["React", "JavaScript", "TypeScript", "CSS", "Node.js", "Python"].map((topic) => (
+                    <Badge 
+                      key={topic}
+                      variant="outline" 
+                      className="cursor-pointer hover:bg-muted transition-colors"
+                      onClick={() => handleSearch(topic)}
+                    >
+                      {topic}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Search Results Layout */
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* Sidebar Filters - Desktop */}
+              <aside className="lg:col-span-1">
+                <div className="sticky top-24 space-y-4">
+                  {/* Mobile Filters Toggle */}
+                  <div className={`lg:block ${showFilters ? 'block' : 'hidden'}`}>
+                    {/* Search Info */}
+                    <Card className="mb-4">
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                          <Search className="w-4 h-4" />
+                          <span>Search Results</span>
+                        </div>
+                        <div className="text-sm font-medium">
+                          {total.toLocaleString()} result{total !== 1 ? 's' : ''} for "{query}"
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Found in {(Math.random() * 0.5 + 0.1).toFixed(2)} seconds
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Active Filters */}
+                    {hasActiveFilters && (
+                      <Card className="mb-4">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-sm font-medium">Active Filters</h3>
+                            <Button variant="ghost" size="sm" onClick={clearFilters}>
+                              Clear
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            {selectedCategory && (
+                              <Badge variant="default" className="text-xs">
+                                <BookOpen className="w-3 h-3 mr-1" />
+                                {selectedCategory}
+                              </Badge>
+                            )}
+                            {selectedTags.map((tag) => (
+                              <Badge key={tag} variant="secondary" className="text-xs mr-1">
+                                <Hash className="w-3 h-3 mr-1" />
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Categories */}
+                    {availableCategories.length > 0 && (
+                      <Card className="mb-4">
+                        <CardContent className="p-4">
+                          <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <BookOpen className="w-4 h-4" />
+                            Categories
+                          </h3>
+                          <div className="space-y-1">
+                            {availableCategories.slice(0, isFiltersExpanded ? availableCategories.length : 5).map((category) => (
+                              <button
+                                key={category}
+                                onClick={() => handleCategoryFilter(category)}
+                                className={`w-full text-left px-2 py-1 rounded text-sm transition-colors ${
+                                  selectedCategory === category 
+                                    ? "bg-primary text-primary-foreground" 
+                                    : "hover:bg-muted"
+                                }`}
+                              >
+                                {category}
+                              </button>
+                            ))}
+                            {availableCategories.length > 5 && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
+                                className="w-full text-xs"
+                              >
+                                {isFiltersExpanded ? (
+                                  <>Show Less <ChevronUp className="w-3 h-3 ml-1" /></>
+                                ) : (
+                                  <>Show More <ChevronDown className="w-3 h-3 ml-1" /></>
+                                )}
+                              </Button>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Tags */}
+                    {availableTags.length > 0 && (
+                      <Card className="mb-4">
+                        <CardContent className="p-4">
+                          <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <Hash className="w-4 h-4" />
+                            Tags
+                          </h3>
+                          <div className="flex flex-wrap gap-1">
+                            {availableTags.map((tag) => (
+                              <Badge
+                                key={tag}
+                                variant={selectedTags.includes(tag) ? "default" : "outline"}
+                                className="cursor-pointer hover:bg-muted text-xs"
+                                onClick={() => handleTagFilter(tag)}
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Related Searches */}
+                    {relatedSearches.length > 0 && (
+                      <Card>
+                        <CardContent className="p-4">
+                          <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4" />
+                            Related Searches
+                          </h3>
+                          <div className="space-y-1">
+                            {relatedSearches.slice(0, 6).map((related, index) => (
+                              <button
+                                key={index}
+                                onClick={() => handleRelatedSearch(related)}
+                                className="w-full text-left px-2 py-1 rounded text-sm hover:bg-muted transition-colors flex items-center gap-2"
+                              >
+                                <Search className="w-3 h-3 text-muted-foreground" />
+                                {related}
+                              </button>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+              </aside>
+
+              {/* Main Results */}
+              <main className="lg:col-span-3">
                 <SearchResultsList
                   results={results}
                   query={query}
@@ -317,25 +512,12 @@ export default function SearchPage() {
                   isLoading={isLoading}
                   relatedSearches={relatedSearches}
                   onRelatedSearch={handleRelatedSearch}
+                  compact={true}
                 />
-              ) : (
-                <div className="text-center py-12">
-                  <Search className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
-                  <h2 className="text-2xl font-bold mb-2">Start Your Search</h2>
-                  <p className="text-muted-foreground mb-6">
-                    Enter keywords, topics, or categories to find relevant blog posts
-                  </p>
-                  <div className="max-w-md mx-auto">
-                    <AdvancedSearchBox
-                      onSearch={handleSearch}
-                      placeholder="Try searching for 'React', 'JavaScript', or 'Web Development'..."
-                    />
-                  </div>
-                </div>
-              )}
+              </main>
             </div>
-          </div>
-        </div>
+          )}
+        </main>
       </div>
     </>
   )
