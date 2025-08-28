@@ -338,49 +338,61 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
               {!searchQuery && featuredPosts.length > 0 && (
                 <section className="mb-12">
                   <h2 className="text-3xl font-bold tracking-tight mb-6">Featured Articles</h2>
-                  <div className="overflow-x-auto pb-4">
-                    <div className="flex gap-6 w-max">
-                      {featuredPosts.map((post) => (
-                        <Card key={post.id} className="overflow-hidden flex-shrink-0 w-[320px] md:w-[400px]">
-                          <div className="relative h-[240px]">
-                            <Image
-                              src={
-                                post.imagePath ||
-                                post.image ||
-                                "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop" ||
-                                "/placeholder.svg" ||
-                                "/placeholder.svg" ||
-                                "/placeholder.svg"
-                              }
-                              alt={post.title}
-                              fill
-                              className="object-cover"
-                              unoptimized={post.imagePath?.startsWith("/uploads/")}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                            <div className="absolute bottom-0 left-0 p-4 text-white">
-                              <Badge className="mb-2 bg-primary text-primary-foreground">{post.category}</Badge>
-                              <h3 className="text-lg font-bold mb-1 line-clamp-2">{post.title}</h3>
-                              <p className="text-white/80 mb-2 line-clamp-2 text-sm">{post.excerpt}</p>
-                              <div className="flex items-center gap-2 text-xs">
-                                <span>{post.author || "Ngoma Benjamin"}</span>
-                                <div className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  <span>{post.date}</span>
+                  <div className="relative">
+                    <div className="overflow-x-auto scrollbar-hide pb-4">
+                      <div className="flex gap-6 w-max">
+                        {featuredPosts.map((post) => (
+                          <Card
+                            key={post.id}
+                            className="overflow-hidden flex-shrink-0 w-[320px] md:w-[400px] hover:shadow-lg transition-all duration-300 group"
+                          >
+                            <div className="relative h-[240px]">
+                              <Image
+                                src={
+                                  post.imagePath ||
+                                  post.image ||
+                                  "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop" ||
+                                  "/placeholder.svg" ||
+                                  "/placeholder.svg" ||
+                                  "/placeholder.svg" ||
+                                  "/placeholder.svg"
+                                }
+                                alt={post.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                unoptimized={post.imagePath?.startsWith("/uploads/")}
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                              <div className="absolute bottom-0 left-0 p-4 text-white">
+                                <Badge className="mb-2 bg-primary text-primary-foreground">{post.category}</Badge>
+                                <h3 className="text-lg font-bold mb-1 line-clamp-2">{post.title}</h3>
+                                <p className="text-white/80 mb-2 line-clamp-2 text-sm">{post.excerpt}</p>
+                                <div className="flex items-center gap-2 text-xs">
+                                  <span>{post.author || "Ngoma Benjamin"}</span>
+                                  <div className="flex items-center gap-1">
+                                    <Calendar className="h-3 w-3" />
+                                    <span>{post.date}</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <CardFooter className="p-3 bg-muted/30">
-                            <Button asChild size="sm" className="w-full">
-                              <Link href={`/blog/${post.id || post.slug}`}>
-                                Read Article <ArrowRight className="ml-2 h-3 w-3" />
-                              </Link>
-                            </Button>
-                          </CardFooter>
-                        </Card>
-                      ))}
+                            <CardFooter className="p-3 bg-muted/30">
+                              <Button
+                                asChild
+                                size="sm"
+                                className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                              >
+                                <Link href={`/blog/${post.id || post.slug}`}>
+                                  Read Article <ArrowRight className="ml-2 h-3 w-3" />
+                                </Link>
+                              </Button>
+                            </CardFooter>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
+                    <div className="absolute top-1/2 -translate-y-1/2 left-0 w-8 h-full bg-gradient-to-r from-background to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute top-1/2 -translate-y-1/2 right-0 w-8 h-full bg-gradient-to-l from-background to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </section>
               )}
@@ -391,18 +403,14 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
                   <TabsList className="w-full grid grid-cols-4 mb-6">
                     <TabsTrigger value="all">All Posts</TabsTrigger>
                     {categories.slice(0, 3).map((category) => (
-                      <TabsTrigger key={category} value={category.toLowerCase()}>
+                      <TabsTrigger className="truncate" key={category} value={category.toLowerCase()}>
                         {category}
                       </TabsTrigger>
                     ))}
                   </TabsList>
                   <TabsContent value="all">
                     <BlogPostsList
-                      posts={
-                        searchQuery || categoryFilter
-                          ? paginatedPosts
-                          : sortedPosts.filter((post) => !post.featured || searchQuery)
-                      }
+                      posts={searchQuery || categoryFilter ? paginatedPosts : sortedPosts}
                       currentPage={currentPage}
                       totalPages={totalPages}
                       searchParams={searchParams}
@@ -513,6 +521,7 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
                                 "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=64&h=64&fit=crop" ||
                                 "/placeholder.svg" ||
                                 "/placeholder.svg" ||
+                                "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
                               alt={post.title}
@@ -599,6 +608,7 @@ function BlogPostsList({ posts, currentPage = 1, totalPages = 1, searchParams }:
                     post.image ||
                     "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=240&h=160&fit=crop" ||
                     "/placeholder.svg" ||
+                    "/placeholder.svg" ||
                     "/placeholder.svg"
                   }
                   alt={post.title}
@@ -650,6 +660,7 @@ function BlogPostsList({ posts, currentPage = 1, totalPages = 1, searchParams }:
                     post.imagePath ||
                     post.image ||
                     "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop" ||
+                    "/placeholder.svg" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg"
                   }

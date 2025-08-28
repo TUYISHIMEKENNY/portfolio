@@ -1,4 +1,4 @@
-import { generateBlogPost } from "./gemini-ai"
+import { generateBlogPost } from "./openrouter-ai"
 import { getUnsplashImage } from "./unsplash"
 import { saveData, saveImage } from "./file-storage"
 import { logActivity } from "./activity-logger"
@@ -28,11 +28,11 @@ export async function generateAndPublishBlogPost(
   timeOfDay: "morning" | "evening",
 ): Promise<{ success: boolean; id?: string; error?: string }> {
   try {
-    if (!process.env.GEMINI_API_KEY || !process.env.UNSPLASH_ACCESS_KEY) {
+    if (!process.env.OPENROUTER_API_KEY || !process.env.UNSPLASH_ACCESS_KEY) {
       return { success: false, error: "API keys not configured" }
     }
 
-    // Generate the blog post content using Gemini AI
+    // Generate the blog post content using OpenRouter AI
     const blogData = await generateBlogPost(timeOfDay)
 
     // Get a relevant image from Unsplash
@@ -55,7 +55,7 @@ export async function generateAndPublishBlogPost(
       content: blogData.content,
       excerpt: blogData.excerpt,
       tags: blogData.tags,
-      category: "development",
+      category: blogData.category,
       imagePath: imagePath || "/placeholder.svg?height=600&width=1200&text=Web+Development",
       author: "Ngoma Benjamin",
       authorImage: "/placeholder.svg?height=100&width=100&text=NB",

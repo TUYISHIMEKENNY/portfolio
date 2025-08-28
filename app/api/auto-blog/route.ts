@@ -1,11 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateBlogPost } from "@/lib/gemini-ai"
+import { generateBlogPost } from "@/lib/openrouter-ai"
 import { getUnsplashImage } from "@/lib/unsplash"
 import { saveData } from "@/lib/file-storage"
 import { logActivity } from "@/lib/activity-logger"
 import slugify from "slugify"
 import fs from "fs"
 import path from "path"
+import { buildSearchIndex } from "@/lib/search-index"
 
 // Function to download an image from a URL and save it to the server
 async function downloadAndSaveImage(imageUrl: string, fileName: string): Promise<string | null> {
@@ -48,33 +49,28 @@ export async function POST(request: NextRequest) {
   try {
     // Check for authorization (you might want to add a secret key check here)
     const authHeader = request.headers.get("authorization")
-    if (!process.env.GEMINI_API_KEY || !process.env.UNSPLASH_ACCESS_KEY) {
+    if (!process.env.OPENROUTER_API_KEY || !process.env.UNSPLASH_ACCESS_KEY) {
       return NextResponse.json({ error: "API keys not configured" }, { status: 500 })
     }
 
-    // Add this validation for the Gemini API key
-    if (process.env.GEMINI_API_KEY === "") {
-      return NextResponse.json({ error: "Gemini API key is empty" }, { status: 500 })
+    if (process.env.OPENROUTER_API_KEY === "") {
+      return NextResponse.json({ error: "OpenRouter API key is empty" }, { status: 500 })
     }
 
     // Get the time of day from the request or default to "morning"
     const { timeOfDay = "morning" } = await request.json()
 
-    // Generate the blog post content using Gemini AI
     const blogData = await generateBlogPost(timeOfDay as "morning" | "evening")
 
-    // Add this validation to check if we got proper content or fallback content
     if (
       blogData.content.includes("Content Generation Error") ||
-      blogData.content.includes("API Configuration Required")
+      blogData.content.includes("OpenRouter AI Integration Issue")
     ) {
-      console.error("Received fallback content from Gemini AI, indicating an error occurred")
+      console.error("Received fallback content from OpenRouter AI, indicating an error occurred")
       return NextResponse.json(
         {
-          error: "Failed to generate blog content with Gemini AI",
-          details: blogData.content.includes("API Configuration Required")
-            ? "API key configuration issue"
-            : "Content generation error",
+          error: "Failed to generate blog content with OpenRouter AI",
+          details: blogData.content.includes("API key") ? "API key configuration issue" : "Content generation error",
         },
         { status: 500 },
       )
@@ -100,7 +96,7 @@ export async function POST(request: NextRequest) {
       content: blogData.content,
       excerpt: blogData.excerpt,
       tags: blogData.tags,
-      category: blogData.category, // Use the category from Gemini AI
+      category: blogData.category,
       imagePath: imagePath || "/placeholder.svg?height=600&width=1200&text=Web+Development",
       author: "Ngoma Benjamin",
       authorImage: "/placeholder.svg?height=100&width=100&text=NB",
@@ -125,6 +121,14 @@ export async function POST(request: NextRequest) {
 
     // Log the activity
     await logActivity("created", "blog", id, postData.title)
+
+    try {
+      await buildSearchIndex()
+      console.log("Search index updated after creating auto-generated blog post")
+    } catch (indexError) {
+      console.error("Error updating search index:", indexError)
+      // Continue even if search index update fails
+    }
 
     // Notify subscribers about the new post (reusing existing functionality)
     try {
@@ -173,6 +177,7 @@ export async function GET(request: NextRequest) {
     })
 
     const data = await response.json()
+    console.log("Auto blog post generation triggered via GET:", data)
     return NextResponse.json(data)
   } catch (error) {
     console.error("Error triggering blog post generation:", error)

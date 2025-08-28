@@ -3,6 +3,7 @@ import { getAllItems, saveData } from "@/lib/file-storage"
 import { logActivity } from "@/lib/activity-logger"
 import slugify from "slugify"
 import { sendNewsletterToAll } from "@/lib/email"
+import { buildSearchIndex } from "@/lib/search-index"
 
 // GET /api/blog - Get all blog posts
 export async function GET(request: NextRequest) {
@@ -45,6 +46,14 @@ export async function POST(request: NextRequest) {
 
     // Log the activity
     await logActivity("created", "blog", id, data.title)
+
+    try {
+      await buildSearchIndex()
+      console.log("Search index updated after creating new blog post")
+    } catch (indexError) {
+      console.error("Error updating search index:", indexError)
+      // Continue even if search index update fails
+    }
 
     // Send notification to subscribers about new blog post
     try {
