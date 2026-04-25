@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Ngoma Benjamin</h3>
+            <h3 className="text-lg font-medium">TUYISHIME KENNY ARAFAT</h3>
             <p className="text-sm text-muted-foreground">
               Founder of 301Inc and full-stack developer specializing in modern web technologies and solutions.
             </p>
@@ -102,9 +102,9 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>© {currentYear} Ngoma Benjamin (ngoma301). All rights reserved.</p>
+          <p>© {currentYear} TUYISHIME KENNY ARAFAT . All rights reserved.</p>
           <p className="mt-1">
-            Founder of <span className="font-medium">301Inc</span> - Building the web of tomorrow.
+            Founder of <span className="font-medium">KENNY.rw</span> - Building the web of tomorrow.
           </p>
         </div>
       </div>

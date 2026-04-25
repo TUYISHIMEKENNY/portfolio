@@ -137,7 +137,11 @@ export default function CommentSystem({ postId }: CommentSystemProps) {
       }
     } catch (error) {
       console.error("Error loading comments:", error)
-      toast.error("Failed to load comments")
+      toast({
+        title: "Error",
+        description: "Failed to load comments",
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }

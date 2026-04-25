@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
           <div className="prose prose-lg max-w-none dark:prose-invert">
             <h2>Introduction</h2>
             <p>
-              Welcome to Ngoma Benjamin's portfolio website. This Privacy Policy explains how we collect, use, disclose,
+              Welcome to TUYISHIME KENNY ARAFAT's portfolio website. This Privacy Policy explains how we collect, use, disclose,
               and safeguard your information when you visit our website or use our services. Please read this privacy
               policy carefully. If you do not agree with the terms of this privacy policy, please do not access the
               site.
@@ -101,7 +101,7 @@ export default function PrivacyPolicyPage() {
             <h2>Contact Us</h2>
             <p>
               If you have any questions about this Privacy Policy, please contact us at{" "}
-              <a href="mailto:nibenjamin2020@gmail.com">contact@ngomabenjamin.com</a>.
+              <a href="mailto:tuyishimekennyarr98gmail@gmail.com">contact@tuyishimekenny.com</a>.
             </p>
           </div>
 

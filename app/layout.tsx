@@ -11,17 +11,15 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
-    default: "Ngoma Benjamin | Full-Stack Developer",
-    template: "%s | Ngoma Benjamin",
+    default: "TUYISHIME KENNY ARAFAT | Full-Stack Developer",
+    template: "%s | TUYISHIME KENNY ARAFAT",
   },
   description: "Full-stack developer and founder of 301Inc with a passion for web technologies.",
   keywords: [
-    "Ngoma Benjamin",
-    "ngoma301",
-    "301LLc",
-    "kwangoma",
-    "301",
-    "301 pictures presents",
+    "TUYISHIME KENNY ARAFAT",
+    "tuyishime kenny arafat",
+    "tuyi",
+    "TUYI",
     "web developer",
     "full-stack developer",
     "React developer",
@@ -29,24 +27,24 @@ export const metadata: Metadata = {
   ],
   authors: [
     {
-      name: "Ngoma Benjamin",
+      name: "TUYISHIME KENNY ARAFAT",
       url: "https://ngomabenjamin.com",
     },
   ],
-  creator: "Ngoma Benjamin",
+  creator: "TUYISHIME KENNY ARAFAT",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://ngomabenjamin.com",
-    title: "Ngoma Benjamin | Full-Stack Developer",
+    title: "TUYISHIME KENNY ARAFAT | Full-Stack Developer",
     description: "Full-stack web developer and founder of 301Inc with a passion for web technologies.",
-    siteName: "Ngoma Benjamin Portfolio",
+    siteName: "TUYISHIME KENNY ARAFAT Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ngoma Benjamin | Full-Stack Developer",
-    description: "Full-stack developer and founder of 301Inc with a passion for web technologies.",
-    creator: "@ngoma301",
+    title: "TUYISHIME KENNY ARAFAT | Full-Stack Developer",
+    description: "Full-stack web developer and founder of 301Inc with a passion for web technologies.",
+    creator: "KENNY",
   },
   robots: {
     index: true,
@@ -55,7 +53,7 @@ export const metadata: Metadata = {
     generator: '301Inc'
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>

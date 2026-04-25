@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: true, message: "OTP sent to your email" }
     } catch (error) {
       console.error("Send OTP error:", error)
-      return { success: false, message: error.message || "An error occurred while sending OTP" }
+      return { success: false, message: error instanceof Error ? error.message : "An error occurred while sending OTP" }
     }
   }
 
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: true, message: "Authentication successful" }
     } catch (error) {
       console.error("OTP verification error:", error)
-      return { success: false, message: error.message || "An error occurred during OTP verification" }
+      return { success: false, message: error instanceof Error ? error.message : "An error occurred during OTP verification" }
     }
   }
 

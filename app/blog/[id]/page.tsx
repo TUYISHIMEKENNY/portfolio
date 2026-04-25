@@ -150,7 +150,7 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
   const allPosts = await getAllItems("blog")
   const relatedPosts = allPosts
     .filter(
-      (p) => p.id !== post.id && (p.category === post.category || p.tags?.some((tag) => post.tags?.includes(tag))),
+      (p) => p.id !== post.id && (p.category === post.category || p.tags?.some((tag: string) => post.tags?.includes(tag))),
     )
     .slice(0, 3)
 
@@ -238,7 +238,7 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
             <div className="max-w-4xl">
               <div className="flex flex-wrap gap-2 mb-4">
                 <Badge className="bg-primary text-primary-foreground">{post.category}</Badge>
-                {post.tags?.slice(0, 3).map((tag, index) => (
+                {post.tags?.slice(0, 3).map((tag: string, index: number) => (
                   <Badge key={index} variant="secondary" className="bg-white/20 text-white border-white/30">
                     {tag}
                   </Badge>
@@ -416,7 +416,7 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag, index) => (
+                      {post.tags.map((tag: string, index: number) => (
                         <Link key={index} href={`/blog?q=${encodeURIComponent(tag)}`}>
                           <Badge variant="outline" className="hover:bg-muted cursor-pointer">
                             {tag}

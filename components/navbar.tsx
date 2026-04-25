@@ -40,7 +40,7 @@ export function Navbar() {
     >
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold">Ngoma Benjamin</span>
+          <span className="text-xl font-bold">TUYISHIME KENNY ARAFAT</span>
         </Link>
 
         <nav className="hidden md:flex md:gap-6 lg:gap-10">

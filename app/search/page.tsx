@@ -218,7 +218,7 @@ export default function SearchPage() {
         <meta property="og:description" content={seoData.description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://ngomabenjamin.com${seoData.canonicalUrl}`} />
-        <meta property="og:site_name" content="Ngoma Benjamin - Web Development Blog" />
+        <meta property="og:site_name" content="TUYISHIME KENNY ARAFAT - Web Development Blog" />
         <meta property="og:image" content="https://ngomabenjamin.com/search-og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />

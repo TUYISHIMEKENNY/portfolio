@@ -11,7 +11,7 @@ import AOS from "aos"
 import "aos/dist/aos.css"
 
 export default function ResumePage() {
-  const [activeResume, setActiveResume] = useState(null)
+  const [activeResume, setActiveResume] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

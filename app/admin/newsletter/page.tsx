@@ -283,8 +283,8 @@ I've been working on some exciting new projects and have published new content t
 Check out my latest work and let me know what you think!
 
 Best regards,
-Ngoma Benjamin
-Founder, 301Inc`,
+TUYISHIME KENNY ARAFAT
+Founder, KENNY.rw`,
                     includeBlogPosts: true,
                   })
                 }
@@ -314,8 +314,8 @@ In this guide, I cover:
 I hope you find this information helpful for your projects!
 
 Best regards,
-Ngoma Benjamin
-Founder, 301Inc`,
+TUYISHIME KENNY ARAFAT
+Founder, KENNY.rw`,
                     includeBlogPosts: false,
                   })
                 }

@@ -11,7 +11,7 @@ export interface TableOfContentsItem {
  * Converts Markdown or raw HTML to HTML and extracts the table of contents.
  */
 export function extractTableOfContents(content: string, isMarkdown = true): TableOfContentsItem[] {
-  const html = isMarkdown ? marked(content) : content
+  const html = isMarkdown ? (marked.parse(content) as string) : content
   return parseHtmlForToc(html)
 }
 
@@ -28,7 +28,8 @@ function parseHtmlForToc(htmlContent: string): TableOfContentsItem[] {
     const document = dom.window.document
     const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6")
 
-    headings.forEach((heading) => {
+    headings.forEach((node) => {
+      const heading = node as HTMLElement
       const level = Number.parseInt(heading.tagName.charAt(1))
       const text = heading.textContent?.trim() || ""
       const id = generateUniqueHeadingId(text, usedIds)
@@ -42,7 +43,8 @@ function parseHtmlForToc(htmlContent: string): TableOfContentsItem[] {
     div.innerHTML = htmlContent
     const headings = div.querySelectorAll("h1, h2, h3, h4, h5, h6")
 
-    headings.forEach((heading) => {
+    headings.forEach((node) => {
+      const heading = node as HTMLElement
       const level = Number.parseInt(heading.tagName.charAt(1))
       const text = heading.textContent?.trim() || ""
       const id = generateUniqueHeadingId(text, usedIds)
@@ -89,14 +91,15 @@ function generateUniqueHeadingId(text: string, usedIds: Set<string>): string {
  * Adds IDs to all headings in a given Markdown or HTML string.
  */
 export function addIdsToHeadings(content: string, isMarkdown = true): string {
-  const html = isMarkdown ? marked(content) : content
+  const html = isMarkdown ? (marked.parse(content) as string) : content
   const usedIds = new Set<string>()
 
   const dom = new JSDOM(html)
   const document = dom.window.document
   const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6")
 
-  headings.forEach((heading) => {
+  headings.forEach((node) => {
+    const heading = node as HTMLElement
     const text = heading.textContent?.trim() || ""
     const id = generateUniqueHeadingId(text, usedIds)
     if (!heading.id) {

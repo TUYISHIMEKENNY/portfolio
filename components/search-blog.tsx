@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, X } from "lucide-react"
 
-export default function SearchBlog({ initialQuery = "" }) {
+export default function SearchBlog({ initialQuery = "" }: { initialQuery?: string }) {
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -17,7 +17,7 @@ export default function SearchBlog({ initialQuery = "" }) {
     setSearchQuery(query)
   }, [searchParams])
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
 
     // Update URL with search query

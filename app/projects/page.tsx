@@ -12,7 +12,7 @@ import AOS from "aos"
 import "aos/dist/aos.css"
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([])
+  const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState("all")
 
@@ -195,7 +195,7 @@ export default function ProjectsPage() {
   )
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index }: { project: any; index: number }) {
   const isUpcoming = project.status === "upcoming"
 
   return (

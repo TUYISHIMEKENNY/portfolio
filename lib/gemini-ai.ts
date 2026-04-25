@@ -139,7 +139,7 @@ We encountered an error while parsing the AI-generated content. The AI response 
 
 ### Error Details:
 \`\`\`
-${parseError.message}
+${parseError instanceof Error ? parseError.message : "JSON parsing failed"}
 \`\`\`
 
 ### Raw AI Response:
@@ -213,7 +213,7 @@ We encountered an error while generating this blog post content. Our system uses
 
 Please try again later or check the server logs for more detailed error information.
 
-Error details: ${error.message || "Unknown error"}`,
+Error details: ${error instanceof Error ? error.message : "Unknown error"}`,
       excerpt: "An educational blog post about web development.",
       tags: ["webdev", "programming", "tutorial"],
       topic: "Web Development",

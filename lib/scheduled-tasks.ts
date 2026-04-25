@@ -100,6 +100,6 @@ export async function generateAndPublishBlogPost(
     return { success: true, id }
   } catch (error) {
     console.error("Error generating and publishing blog post:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "An unknown error occurred" }
   }
 }

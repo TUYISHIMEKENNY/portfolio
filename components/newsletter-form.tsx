@@ -55,7 +55,7 @@ export function NewsletterForm({ className }: NewsletterFormProps) {
       console.error("Error subscribing to newsletter:", error)
       toast({
         title: "Error",
-        description: error.message || "Failed to subscribe. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to subscribe. Please try again.",
         variant: "destructive",
       })
     } finally {

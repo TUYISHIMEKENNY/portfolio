@@ -3,6 +3,17 @@ import fs from "fs"
 import path from "path"
 import { ensureDirectoriesExist } from "./file-storage"
 
+export interface BlogPost {
+  title: string
+  slug: string
+  excerpt: string
+  content?: string
+  date?: string
+  imagePath?: string
+  tags?: string[]
+  category?: string
+}
+
 // Email configuration
 const EMAIL_HOST = process.env.EMAIL_HOST || "smtp.gmail.com"
 const EMAIL_PORT = Number.parseInt(process.env.EMAIL_PORT || "587", 10)
@@ -37,7 +48,7 @@ export function ensureNewsletterDirectoryExists() {
 }
 
 // Get all subscribers
-export async function getSubscribers() {
+export async function getSubscribers(): Promise<any[]> {
   ensureNewsletterDirectoryExists()
   const data = await fs.promises.readFile(SUBSCRIBERS_FILE, "utf-8")
   return JSON.parse(data)
@@ -131,7 +142,7 @@ Founder, 301Inc
     return { success: true }
   } catch (error) {
     console.error("Error sending email:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "An unknown error occurred" }
   }
 }
 
@@ -159,12 +170,12 @@ Founder, 301Inc
     return { success: true }
   } catch (error) {
     console.error("Error sending welcome email:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "An unknown error occurred" }
   }
 }
 
 // Send newsletter to all subscribers
-export async function sendNewsletterToAll(subject: string, content: string, blogPosts = []) {
+export async function sendNewsletterToAll(subject: string, content: string, blogPosts: BlogPost[] = []) {
   try {
     const subscribers = await getSubscribers()
 
@@ -186,7 +197,7 @@ export async function sendNewsletterToAll(subject: string, content: string, blog
     return { success: true, message: `Newsletter sent to ${subscribers.length} subscribers` }
   } catch (error) {
     console.error("Error sending newsletter:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "An unknown error occurred" }
   }
 }
 
@@ -289,7 +300,7 @@ function getWelcomeEmailTemplate() {
   `
 }
 
-function getNewsletterTemplate(subject: string, content: string, blogPosts = [], subscriberId: string) {
+function getNewsletterTemplate(subject: string, content: string, blogPosts: BlogPost[] = [], subscriberId: string) {
   const blogPostsHTML =
     blogPosts.length > 0
       ? `

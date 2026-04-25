@@ -16,7 +16,7 @@ interface MarkdownContentWithCopyProps {
 const MarkdownContentWithCopy: React.FC<MarkdownContentWithCopyProps> = ({ htmlContent, rawMarkdown, content }) => {
   const { toast } = useToast()
 
-  const processedHtml = htmlContent || (content ? marked(content) : "")
+  const processedHtml = (htmlContent || (content ? marked.parse(content) : "")) as string
   const markdownSource = rawMarkdown || content || ""
 
   const handleCopy = useCallback(async () => {

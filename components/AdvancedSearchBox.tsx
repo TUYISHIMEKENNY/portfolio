@@ -33,11 +33,13 @@ export default function AdvancedSearchBox({
   onSearch,
   placeholder = "Search articles, topics, or categories...",
   showQuickResults = true,
+  className,
 }: {
   initialQuery?: string
   onSearch?: (query: string) => void
   placeholder?: string
   showQuickResults?: boolean
+  className?: string
 }) {
   const [query, setQuery] = useState(initialQuery)
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
@@ -51,7 +53,7 @@ export default function AdvancedSearchBox({
   const searchParams = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
-  const debounceRef = useRef<NodeJS.Timeout>()
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem("recent-searches")
@@ -232,7 +234,7 @@ export default function AdvancedSearchBox({
   }
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
+    <div className={cn("relative w-full max-w-2xl mx-auto", className)}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

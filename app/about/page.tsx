@@ -59,7 +59,7 @@ export default function AboutPage() {
               <Badge className="px-3 py-1 text-[12px]" variant="secondary">
                 Full-Stack Web & Mobile App Developer
               </Badge>
-              <h2 className="text-3xl font-bold">Ngoma Benjamin</h2>
+              <h2 className="text-3xl font-bold">TUYISHIME KENNY ARAFAT</h2>
               <p className="text-muted-foreground">
                 I'm a passionate full-stack and mobile developer with over 5
                 years of experience creating applications that don’t just work —

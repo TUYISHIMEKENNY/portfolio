@@ -114,7 +114,7 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
               post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
               post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
               post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              post.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
+              post.tags?.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
               post.category?.toLowerCase().includes(searchQuery.toLowerCase()),
           )
         }

@@ -62,7 +62,7 @@ export default function LoginPage() {
     }
   }
 
-  const handleOtpVerification = async (e) => {
+  const handleOtpVerification = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
