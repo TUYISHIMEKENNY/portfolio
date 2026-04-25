@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   // The email is hardcoded since we're simplifying the login process
-  const adminEmail = "nibenjamin2020@gmail.com"
+  const adminEmail = "tuyishimekennyarr98@gmail.com"
 
   useEffect(() => {
     // Check if user is already logged in via cookie

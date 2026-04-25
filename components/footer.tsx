@@ -13,15 +13,15 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">TUYISHIME KENNY ARAFAT</h3>
             <p className="text-sm text-muted-foreground">
-              Founder of 301Inc and full-stack developer specializing in modern web technologies and solutions.
+              Founder of KENNYDEV and full-stack developer specializing in modern web technologies and solutions.
             </p>
             <div className="flex space-x-4">
-              <Link href="https://github.com/ngoma301" target="_blank" rel="noopener noreferrer">
+              <Link href="https://github.com/TUYISHIMEKENNY" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="icon" aria-label="GitHub">
                   <Github className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="https://x.com/ngomafx" target="_blank" rel="noopener noreferrer">
+              {/* <Link href="https://x.com/ngomafx" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="icon" aria-label="Twitter">
                   <Twitter className="h-5 w-5" />
                 </Button>
@@ -30,8 +30,8 @@ export default function Footer() {
                 <Button variant="ghost" size="icon" aria-label="LinkedIn">
                   <Linkedin className="h-5 w-5" />
                 </Button>
-              </Link>
-              <Link href="mailto:nibenjamin2020@gmail.com">
+              </Link> */}
+              <Link href="mailto:[tuyishimekennyarr98@gmail.com]">
                 <Button variant="ghost" size="icon" aria-label="Email">
                   <Mail className="h-5 w-5" />
                 </Button>
@@ -104,7 +104,7 @@ export default function Footer() {
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>© {currentYear} TUYISHIME KENNY ARAFAT . All rights reserved.</p>
           <p className="mt-1">
-            Founder of <span className="font-medium">KENNY.rw</span> - Building the web of tomorrow.
+            Founder of <span className="font-medium">KENNYDEV</span> - Building the web of tomorrow.
           </p>
         </div>
       </div>

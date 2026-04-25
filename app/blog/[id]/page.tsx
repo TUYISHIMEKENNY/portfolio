@@ -27,41 +27,41 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
     if (!post) {
       return {
-        title: "Blog Post Not Found | Ngoma Benjamin",
+        title: "Blog Post Not Found | TUYISHIME KENNY ARAFAT",
         description: "The requested blog post could not be found.",
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ngomabenjamin.com"
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://TUYISHIMEKENNYARAFAT.com"
     const postUrl = `${baseUrl}/blog/${post.id || post.slug}`
     const imageUrl = post.imagePath || post.image || `${baseUrl}/og-blog-default.jpg`
 
     return {
-      title: `${post.title} | Ngoma Benjamin - Web Development Blog`,
+      title: `${post.title} | TUYISHIME KENNY ARAFAT - Web Development Blog`,
       description:
         post.excerpt ||
         post.description ||
-        `Read ${post.title} by Ngoma Benjamin. Expert insights on web development, programming, and technology.`,
+        `Read ${post.title} by TUYISHIME KENNY ARAFAT. Expert insights on web development, programming, and technology.`,
       keywords: [
         post.title.toLowerCase(),
         ...(post.tags || []),
         post.category?.toLowerCase(),
-        "ngoma benjamin",
+        "TUYISHIME KENNY ARAFAT",
         "web development",
         "programming",
         "technology blog",
         "software engineering",
         "full stack development",
       ].filter(Boolean),
-      authors: [{ name: post.author || "Ngoma Benjamin" }],
-      creator: post.author || "Ngoma Benjamin",
-      publisher: "Ngoma Benjamin",
+      authors: [{ name: post.author || "TUYISHIMEKENNYARAFAT" }],
+      creator: post.author || "TUYISHIMEKENNYARAFAT",
+      publisher: "TUYISHIMEKENNYARAFAT",
       openGraph: {
         title: post.title,
         description: post.excerpt || post.description,
         type: "article",
         url: postUrl,
-        siteName: "Ngoma Benjamin",
+        siteName: "TUYISHIMEKENNYARAFAT",
         images: [
           {
             url: imageUrl,
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         ],
         publishedTime: post.date || post.createdAt,
         modifiedTime: post.updatedAt || post.date || post.createdAt,
-        authors: [post.author || "Ngoma Benjamin"],
+        authors: [post.author || "TUYISHIMEKENNYARAFAT"],
         section: post.category,
         tags: post.tags,
       },
@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         title: post.title,
         description: post.excerpt || post.description,
         images: [imageUrl],
-        creator: "@ngoma301",
+        creator: "KENNYDEV",
       },
       robots: {
         index: true,
@@ -98,7 +98,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         canonical: postUrl,
       },
       other: {
-        "article:author": post.author || "Ngoma Benjamin",
+        "article:author": post.author || "TUYISHIMEKENNYARAFAT",
         "article:published_time": post.date || post.createdAt,
         "article:modified_time": post.updatedAt || post.date || post.createdAt,
         "article:section": post.category,
@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     }
   } catch (error) {
     return {
-      title: "Blog Post | Ngoma Benjamin",
+      title: "Blog Post | TUYISHIMEKENNYARAFAT",
       description: "Read the latest insights on web development and programming.",
     }
   }
@@ -155,7 +155,7 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
     .slice(0, 3)
 
   // Generate structured data for SEO
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ngomabenjamin.com"
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://TUYISHIMEKENNYARAFAT.com"
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -171,13 +171,13 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
     dateModified: post.updatedAt || post.date || post.createdAt,
     author: {
       "@type": "Person",
-      name: post.author || "Ngoma Benjamin",
+      name: post.author || "TUYISHIMEKENNYARAFAT",
       url: `${baseUrl}/about`,
       image: `${baseUrl}/author-avatar.jpg`,
     },
     publisher: {
       "@type": "Organization",
-      name: "Ngoma Benjamin",
+      name: "TUYISHIMEKENNYARAFAT",
       logo: {
         "@type": "ImageObject",
         url: `${baseUrl}/logo.png`,
@@ -265,8 +265,8 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-white">{post.author || "Ngoma Benjamin"}</p>
-                    <p className="text-sm text-white/70">Founder of 301Inc</p>
+                    <p className="font-medium text-white">{post.author || "TUYISHIMEKENNYARAFAT"}</p>
+                    <p className="text-sm text-white/70">Web Developer</p>
                   </div>
                 </div>
 
@@ -302,14 +302,14 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
                         "https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" ||
                         "/placeholder.svg"
                        || "/placeholder.svg"}
-                      alt={post.author || "Ngoma Benjamin"}
+                      alt={post.author || "TUYISHIMEKENNYARAFAT"}
                       fill
                       className="object-cover"
                       unoptimized={post.authorImage?.startsWith("/uploads/")}
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">{post.author || "Ngoma Benjamin"}</h3>
+                    <h3 className="font-semibold text-lg">{post.author || "TUYISHIMEKENNYARAFAT"}</h3>
                     <p className="text-muted-foreground">
                       {post.authorBio ||
                         "Founder of 301Inc and full-stack developer with expertise in modern web technologies. Passionate about sharing knowledge and helping developers grow."}
@@ -396,7 +396,7 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
                       />
                     </div>
                     <h3 className="font-semibold mb-1">{post.author || "Ngoma Benjamin"}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">Founder of 301Inc</p>
+                    <p className="text-sm text-muted-foreground mb-3">Founder of KENNYDEV</p>
                     <p className="text-sm mb-4">
                       Full-stack developer with expertise in modern web technologies. Passionate about sharing knowledge
                       and helping developers grow.
@@ -498,7 +498,7 @@ async function BlogPostContent({ params }: BlogPostPageProps) {
                       <h3 className="text-xl font-bold mb-2 line-clamp-2">{relatedPost.title}</h3>
                       <p className="text-muted-foreground line-clamp-2 mb-4">{relatedPost.excerpt}</p>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">{relatedPost.author || "Ngoma Benjamin"}</span>
+                        <span className="text-muted-foreground">{relatedPost.author || "TUYISHIMEKENNYARAFAT"}</span>
                         <div className="flex items-center gap-1 text-muted-foreground">
                           <Calendar className="h-3 w-3" />
                           <span>{relatedPost.date}</span>

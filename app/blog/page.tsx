@@ -31,9 +31,9 @@ export async function generateMetadata({
     title,
     description,
     keywords: [
-      "ngoma benjamin blog",
-      "ngoma301 articles",
-      "301Inc blog",
+      "TUYISHIME KENNY ARAFAT blog",
+      "KENNYDEV articles",
+      "KENNYDEV blog",
       "web development tutorials",
       "programming insights",
       "javascript tutorials",
@@ -51,13 +51,13 @@ export async function generateMetadata({
       description,
       type: "website",
       url: canonical,
-      siteName: "Ngoma Benjamin",
+      siteName: "TUYISHIME KENNY ARAFAT",
       images: [
         {
-          url: "https://ngomabenjamin.com/og-blog.jpg",
+          url: "https://TUYISHIMEKENNYARAFAT.com/og-blog.jpg",
           width: 1200,
           height: 630,
-          alt: "Ngoma Benjamin Blog - Web Development Insights",
+          alt: "TUYISHIME KENNY ARAFAT - Web Development Insights",
         },
       ],
     },
@@ -65,9 +65,9 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: ["https://ngomabenjamin.com/og-blog.jpg"],
-      creator: "@ngoma301",
-      site: "@ngoma301",
+      images: ["https://TUYISHIMEKENNYARAFAT.com/og-blog.jpg"],
+      creator: "KENNYDEV",
+      site: "KENNYDEV",
     },
     robots: {
       index: true,
@@ -85,15 +85,15 @@ export async function generateMetadata({
       types: {
         "application/rss+xml": [
           {
-            url: "https://ngomabenjamin.com/blog/rss.xml",
-            title: "Ngoma Benjamin Blog RSS Feed",
+            url: "https://TUYISHIMEKENNYARAFAT.com/blog/rss.xml",
+            title: "TUYISHIME KENNY ARAFAT Blog RSS Feed",
           },
         ],
       },
     },
     other: {
-      "article:author": "Ngoma Benjamin",
-      "article:publisher": "https://ngomabenjamin.com",
+      "article:author": "TUYISHIME KENNY ARAFAT",
+      "article:publisher": "https://TUYISHIMEKENNYARAFAT.com",
     },
   }
 }

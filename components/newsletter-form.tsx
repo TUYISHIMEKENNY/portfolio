@@ -47,7 +47,7 @@ export function NewsletterForm({ className }: NewsletterFormProps) {
 
       toast({
         title: "Subscribed!",
-        description: "Thank you for subscribing to Ngoma Benjamin's newsletter.",
+        description: "Thank you for subscribing to TUYISHIME KENNY ARAFAT's newsletter.",
       })
 
       setEmail("")

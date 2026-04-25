@@ -63,8 +63,8 @@ export default function AboutPage() {
               <p className="text-muted-foreground">
                 I'm a passionate full-stack and mobile developer with over 5
                 years of experience creating applications that don’t just work —
-                they make a difference. Also known as <strong>ngoma301</strong>,
-                I am <strong>Chief Technology Officer 301LLc </strong>
+                they make a difference. Also known as <strong>KENNYDEV</strong>,
+                I am <strong>Chief Technology Officer KENNYLLc </strong>
                 to deliver digital solutions that combine solid engineering with
                 real business value.
               </p>

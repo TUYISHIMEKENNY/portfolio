@@ -222,20 +222,20 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    headline: "Ngoma Benjamin's Blog",
+    headline: "TUYISHIMEKENNYARAFAT's Blog",
     description:
-      "Expert articles, tutorials, and insights on web development, programming, and technology by Ngoma Benjamin, founder of 301Inc.",
+      "Expert articles, tutorials, and insights on web development, programming, and technology by TUYISHIMEKENNYARAFAT, founder of 301Inc.",
     author: {
       "@type": "Person",
-      name: "Ngoma Benjamin",
-      url: "https://ngomabenjamin.com/about",
+      name: "TUYISHIMEKENNYARAFAT",
+      url: "https://TUYISHIMEKENNYARAFAT.com/about",
     },
     publisher: {
       "@type": "Organization",
-      name: "Ngoma Benjamin",
+      name: "TUYISHIMEKENNYARAFAT",
       logo: {
         "@type": "ImageObject",
-        url: "https://ngomabenjamin.com/logo.png",
+        url: "https://TUYISHIMEKENNYARAFAT.com/logo.png",
       },
     },
     blogPost: sortedPosts.slice(0, 10).map((post) => ({
@@ -246,9 +246,9 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
       dateModified: post.updatedAt || post.date || post.createdAt,
       author: {
         "@type": "Person",
-        name: post.author || "Ngoma Benjamin",
+        name: post.author || "TUYISHIMEKENNYARAFAT",
       },
-      url: `https://ngomabenjamin.com/blog/${post.id || post.slug}`,
+      url: `https://TUYISHIMEKENNYARAFAT.com/blog/${post.id || post.slug}`,
     })),
   }
 
@@ -561,8 +561,8 @@ export default function BlogClientPage({ searchParams }: BlogPageProps) {
                         className="object-cover"
                       />
                     </div>
-                    <h3 className="mt-4 font-semibold">Ngoma Benjamin</h3>
-                    <p className="text-sm text-muted-foreground">Founder of 301Inc</p>
+                    <h3 className="mt-4 font-semibold">TUYISHIMEKENNYARAFAT</h3>
+                    <p className="text-sm text-muted-foreground">Web Developer</p>
                     <p className="mt-2 text-sm">
                       Full-stack developer with expertise in modern web technologies. Passionate about sharing knowledge
                       and helping developers grow.

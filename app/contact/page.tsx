@@ -46,7 +46,7 @@ export default function ContactPage() {
         },
         body: JSON.stringify({
           ...formData,
-          recipient: "Ngoma Benjamin", // Update recipient name
+          recipient: "TUYISHIME KENNY ARAFAT", // Update recipient name
         }),
       })
 
@@ -104,7 +104,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Email</p>
-                    <p className="font-medium">nibenjamin2020@gmail.com</p>
+                    <p className="font-medium">tuyishimekennyarr98@gmail.com</p>
                   </div>
                 </CardContent>
               </Card>
@@ -116,7 +116,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Phone</p>
-                    <p className="font-medium">+250 (780) 925-937</p>
+                    <p className="font-medium">+250 (796) 664 994</p>
                   </div>
                 </CardContent>
               </Card>
@@ -138,7 +138,7 @@ export default function ContactPage() {
               <h3 className="mb-4 text-xl font-bold">Connect with Me</h3>
               <div className="flex gap-4">
                 <Link
-                  href="https://github.com/NGOMA301"
+                  href="https://github.com/TUYISHIMEKENNY"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80"
@@ -146,7 +146,7 @@ export default function ContactPage() {
                   <Github className="h-5 w-5" />
                   <span className="sr-only">GitHub</span>
                 </Link>
-                <Link
+                {/* <Link
                   href="https://www.linkedin.com/in/ngoma-benjamin-408483336/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -154,8 +154,8 @@ export default function ContactPage() {
                 >
                   <Linkedin className="h-5 w-5" />
                   <span className="sr-only">LinkedIn</span>
-                </Link>
-                <Link
+                </Link> */}
+                {/* <Link
                   href="https://x.com/NgomaFx"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -163,7 +163,7 @@ export default function ContactPage() {
                 >
                   <Twitter className="h-5 w-5" />
                   <span className="sr-only">Twitter</span>
-                </Link>
+                </Link> */}
               </div>
             </div>
 
@@ -252,7 +252,7 @@ export default function ContactPage() {
           <h2 className="mb-6 text-2xl font-bold">Find Me Here</h2>
           <div className="h-[400px] overflow-hidden rounded-xl bg-muted">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.553302774984!2d30.05080627480488!3d-1.9307115980517515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca3f7e2241529%3A0x927923c6c8724171!2sKG%20800%20St%2C%20Kigali!5e0!3m2!1sen!2srw!4v1744993262622!5m2!1sen!2srw"
+              src="https://www.google.com/maps/place/KN+324+St,+Kigali/@-1.9882561,30.0455992,17z/data=!3m1!4b1!4m6!3m5!1s0x19dca5f3f22ae041:0x2f8a9fb65519fa2!8m2!3d-1.9882615!4d30.0481741!16s%2Fg%2F12xpx7z6b?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
               width="100%"
               height="100%"
               style={{ border: 0 }}

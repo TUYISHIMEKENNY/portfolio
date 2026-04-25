@@ -108,7 +108,7 @@ export default function LoginPage() {
             {!showOtpForm ? (
               <div className="space-y-4">
                 <p className="text-center text-sm text-muted-foreground">
-                  An OTP will be sent to: nibenjamin2020@gmail.com
+                  An OTP will be sent to: tuyishimekennyarr98@gmail.com
                 </p>
                 <Button onClick={handleSendOtp} className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? "Sending..." : "Send OTP Code"}

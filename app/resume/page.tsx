@@ -410,13 +410,13 @@ export default function ResumePage() {
                   <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-semibold">English</h4>
+                        <h4 className="font-semibold">Kinyarwanda</h4>
                         <span className="text-sm text-muted-foreground">Native</span>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-semibold">Spanish</h4>
+                        <h4 className="font-semibold"></h4>English
                         <span className="text-sm text-muted-foreground">Intermediate</span>
                       </div>
                     </div>

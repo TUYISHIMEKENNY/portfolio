@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-20 pb-20">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-muted/40 py-24 md:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-muted/50 to-background py-24 md:py-32">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
         </div>
@@ -33,10 +33,10 @@ export default function Home() {
                   Full-Stack Web & Mobile App Developer
                 </Badge>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                  Hi, I'm <span className="text-primary">Ngoma Benjamin</span>
+                  Hi, I'm <span className="text-primary">TUYISHIME KENNY ARAFAT</span>
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Founder of 301Inc. I build exceptional digital experiences that make people's lives easier.
+                  Founder of KENNYDEV. I build exceptional digital experiences that make people's lives easier.
                   Specializing in modern web technologies and user-centric design.
                 </p>
               </div>
@@ -56,10 +56,10 @@ export default function Home() {
             <div className="flex items-center justify-center" data-aos="fade-left">
               <div className="relative h-[350px] w-[350px] overflow-hidden rounded-full border-4 border-primary/20 bg-muted p-2">
                 <Image
-                  src="/ngoma-benjamin-passport-img.png"
-                  alt="Developer Portrait"
+                  src="/ngoma-about-img.png"
+                  alt="Benjamin Portrait"
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 hover:scale-105"
                   priority
                 />
               </div>
@@ -136,10 +136,10 @@ export default function Home() {
               <Card key={project} className="overflow-hidden" data-aos="fade-up" data-aos-delay={project * 100}>
                 <div className="aspect-video relative">
                   <Image
-                    src={`/placeholder.svg?height=300&width=600&text=Project+${project}`}
+                    src={`/workspace-bg.png`}
                     alt={`Project ${project}`}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
                 <CardContent className="p-6">
@@ -196,7 +196,7 @@ export default function Home() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <p className="italic text-muted-foreground">
-                        "John is an exceptional developer who delivered our project on time and exceeded our
+                        "Benjamin is an exceptional developer who delivered our project on time and exceeded our
                         expectations. His attention to detail and problem-solving skills are impressive."
                       </p>
                       <div className="flex items-center gap-4">

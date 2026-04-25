@@ -75,7 +75,7 @@ function getOtpEmailTemplate(otp: string) {
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">Ngoma Benjamin</div>
+      <div class="logo">TUYISHIME KENNY ARAFAT</div>
       <div>Portfolio Admin Access</div>
     </div>
     <div class="content">
@@ -86,7 +86,7 @@ function getOtpEmailTemplate(otp: string) {
       <p>If you didn't request this code, please ignore this email or contact us if you have concerns.</p>
     </div>
     <div class="footer">
-      <p>© ${new Date().getFullYear()} Ngoma Benjamin (ngoma301). All rights reserved.</p>
+      <p>© ${new Date().getFullYear()} TUYISHIME KENNY ARAFAT (KENNYDEV). All rights reserved.</p>
       <p>This is an automated message, please do not reply to this email.</p>
     </div>
   </div>
