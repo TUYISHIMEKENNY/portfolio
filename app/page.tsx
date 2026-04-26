@@ -33,7 +33,7 @@ export default function Home() {
                   Full-Stack Web & Mobile App Developer
                 </Badge>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                  Hi, I'm <span className="text-primary">TUYISHIME KENNY ARAFAT</span>
+                  Hi, I'm <span className="text-primary font-quicksand">TUYISHIME KENNY ARAFAT</span>
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Founder of KENNYDEV. I build exceptional digital experiences that make people's lives easier.

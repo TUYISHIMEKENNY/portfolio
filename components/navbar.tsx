@@ -40,7 +40,7 @@ export function Navbar() {
     >
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold">TUYISHIME KENNY ARAFAT</span>
+          <span className="text-xl font-bold font-quicksand">TUYISHIME KENNY ARAFAT</span>
         </Link>
 
         <nav className="hidden md:flex md:gap-6 lg:gap-10">
@@ -76,7 +76,7 @@ export function Navbar() {
               </SheetHeader>
               <div className="flex flex-col gap-6 py-6">
                 <Link href="/" className="flex items-center gap-2">
-                  <span className="text-xl font-bold">John Doe</span>
+                  <span className="text-xl font-bold font-quicksand">TUYISHIME KENNY ARAFAT</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
                   {navItems.map((item) => (

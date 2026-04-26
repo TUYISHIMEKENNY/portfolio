@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">TUYISHIME KENNY ARAFAT</h3>
+            <h3 className="text-lg font-medium font-quicksand">TUYISHIME KENNY ARAFAT</h3>
             <p className="text-sm text-muted-foreground">
               Founder of KENNYDEV and full-stack developer specializing in modern web technologies and solutions.
             </p>
