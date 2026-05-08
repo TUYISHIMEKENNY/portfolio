@@ -141,10 +141,10 @@ export default function AboutPage() {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Badge variant="outline" className="mb-2">
-                    2021 - Present
+                    2026 - Present
                   </Badge>
                   <h3 className="text-xl font-bold">
-                    CTO (Chief Technology Officer) in 301LLc
+                    CTO (Chief Technology Officer) in KENDEv
                   </h3>
                   <p className="text-muted-foreground">Kigali, Rwanda</p>
                   <p>
@@ -157,7 +157,7 @@ export default function AboutPage() {
                 </div>
                 <div className="space-y-2">
                   <Badge variant="outline" className="mb-2">
-                    2018 - 2021
+                    2026 - 2023
                   </Badge>
                   <h3 className="text-xl font-bold">
                     Freelance Full-Stack Developer
@@ -186,12 +186,12 @@ export default function AboutPage() {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Badge variant="outline" className="mb-2">
-                    2019 - 2020
+                    2023 - 2022
                   </Badge>
                   <h3 className="text-xl font-bold">
                     Software Development Certifications
                   </h3>
-                  <p className="text-muted-foreground">Alison</p>
+                  <p className="text-muted-foreground">TechRise ,Natcom</p>
                   <p>
                     Completed certifications in Web Development, Mobile App
                     Development, Python Programming, and DevOps. Focused on
@@ -201,14 +201,14 @@ export default function AboutPage() {
                 </div>
                 <div className="space-y-2">
                   <Badge variant="outline" className="mb-2">
-                    2014 - 2018
+                    2023 - 2022
                   </Badge>
-                  <h3 className="text-xl font-bold">BSc in Computer Science</h3>
+                  <h3 className="text-xl font-bold">Software development</h3>
                   <p className="text-muted-foreground">
-                    University of Technology
+                    KIGALI LEADING TSS
                   </p>
                   <p>
-                    Specialized in software engineering and web technologies.
+                    Specialized in software  and web technologies.
                     Thesis focused on building scalable, high-performance web
                     architectures.
                   </p>
