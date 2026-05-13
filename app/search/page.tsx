@@ -63,14 +63,14 @@ export default function SearchPage() {
   }, [query, selectedCategory, selectedTags, router])
 
   const generateSEOData = () => {
-    const baseTitle = "Advanced Blog Search | Ngoma Benjamin - Web Development & Programming"
+    const baseTitle = "Advanced Blog Search | tuyishimekennyarafat - Web Development & Programming"
     const baseDescription =
       "Search through expert articles, tutorials, and insights on web development, programming, React, JavaScript, and modern technologies. Find exactly what you need."
 
     if (query) {
       const resultText = total === 1 ? "result" : "results"
       return {
-        title: `"${query}" - ${total} ${resultText} | Ngoma Benjamin Blog Search`,
+        title: `"${query}" - ${total} ${resultText} | Tuyishimekennyarafat Blog Search`,
         description: `Search results for "${query}". ${total} ${resultText} found covering web development, programming, and technology tutorials. ${selectedCategory ? `Filtered by ${selectedCategory}.` : ""} Get expert insights and practical tutorials.`,
         keywords: [
           query,
@@ -134,7 +134,7 @@ export default function SearchPage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SearchResultsPage",
-    url: `https://ngomabenjamin.com${seoData.canonicalUrl}`,
+    url: `https://tuyishimekennyarafat.com${seoData.canonicalUrl}`,
     name: seoData.title,
     description: seoData.description,
     mainEntity: {
@@ -147,20 +147,20 @@ export default function SearchPage() {
           "@type": "BlogPosting",
           headline: result.post.title,
           description: result.post.excerpt,
-          url: `https://ngomabenjamin.com/blog/${result.post.id || result.post.slug}`,
+          url: `https://tuyishimekennyarafat.com/blog/${result.post.id || result.post.slug}`,
           author: {
             "@type": "Person",
-            name: result.post.author || "Ngoma Benjamin",
-            url: "https://ngomabenjamin.com/about"
+            name: result.post.author || "Tuyishime kennya arafat",
+            url: "https://tuyishimekennyarafat.com/about"
           },
           publisher: {
             "@type": "Organization",
-            name: "Ngoma Benjamin",
-            url: "https://ngomabenjamin.com"
+            name: "tuyishimekennyarafat",
+            url: "https://tuyishimekennyarafat.com"
           },
           datePublished: result.post.date || result.post.createdAt,
           dateModified: result.post.updatedAt || result.post.date || result.post.createdAt,
-          image: result.post.imagePath || result.post.image || "https://ngomabenjamin.com/default-blog-image.jpg",
+          image: result.post.imagePath || result.post.image || "https://tuyishimekennyarafat.com/default-blog-image.jpg",
           keywords: [result.post.category, ...(result.post.tags || [])].filter(Boolean).join(", ")
         },
       })),
@@ -169,14 +169,14 @@ export default function SearchPage() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://ngomabenjamin.com/search?q={search_term_string}"
+        urlTemplate: "https://tuyishimekennyarafat.com/search?q={search_term_string}"
       },
       "query-input": "required name=search_term_string",
     },
     provider: {
       "@type": "Organization",
-      name: "Ngoma Benjamin",
-      url: "https://ngomabenjamin.com"
+      name: "tuyishimekennyarafat",
+      url: "https://tuyishimekennyarafat.com"
     }
   }
 
@@ -188,19 +188,19 @@ export default function SearchPage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://ngomabenjamin.com"
+        item: "https://tuyishimekennyarafat.com"
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Search",
-        item: "https://ngomabenjamin.com/search"
+        item: "https://tuyishimekennyarafat.com/search"
       },
       ...(query ? [{
         "@type": "ListItem",
         position: 3,
         name: `Search: ${query}`,
-        item: `https://ngomabenjamin.com${seoData.canonicalUrl}`
+        item: `https://tuyishimekennyarafat.com${seoData.canonicalUrl}`
       }] : [])
     ]
   }
@@ -211,15 +211,15 @@ export default function SearchPage() {
         <title>{seoData.title}</title>
         <meta name="description" content={seoData.description} />
         <meta name="keywords" content={seoData.keywords.join(", ")} />
-        <link rel="canonical" href={`https://ngomabenjamin.com${seoData.canonicalUrl}`} />
+        <link rel="canonical" href={`https://tuyishimekennnyarafat.com${seoData.canonicalUrl}`} />
 
         {/* Enhanced Open Graph */}
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://ngomabenjamin.com${seoData.canonicalUrl}`} />
+        <meta property="og:url" content={`https://tuyishimekennyarafat.com${seoData.canonicalUrl}`} />
         <meta property="og:site_name" content="TUYISHIME KENNY ARAFAT - Web Development Blog" />
-        <meta property="og:image" content="https://ngomabenjamin.com/search-og-image.jpg" />
+        <meta property="og:image" content="" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:locale" content="en_US" />
@@ -230,14 +230,14 @@ export default function SearchPage() {
         <meta name="twitter:creator" content="@ngomabenjamin" />
         <meta name="twitter:title" content={seoData.title} />
         <meta name="twitter:description" content={seoData.description} />
-        <meta name="twitter:image" content="https://ngomabenjamin.com/search-twitter-image.jpg" />
+        <meta name="twitter:image" content="" />
 
         {/* Enhanced Robots and SEO */}
         <meta name="robots" content="index, follow, max-snippet:160, max-image-preview:large, max-video-preview:30" />
         <meta name="googlebot" content="index, follow, max-snippet:160, max-image-preview:large, max-video-preview:30" />
         <meta name="bingbot" content="index, follow" />
         <meta name="revisit-after" content="1 day" />
-        <meta name="author" content="Ngoma Benjamin" />
+        <meta name="author" content="Tuyishime Kenny arafat" />
         <meta name="language" content="en" />
         
         {/* Additional SEO Meta */}

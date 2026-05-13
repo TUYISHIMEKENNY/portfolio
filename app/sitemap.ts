@@ -3,7 +3,7 @@ import { getAllItems } from "@/lib/file-storage"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Base URL for the site
-  const baseUrl = "https://ngomabenjamin.com"
+  const baseUrl = "https://tuyishimekennyarafat.com"
 
   // Get all blog posts
   let blogPosts = []

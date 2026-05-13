@@ -36,7 +36,7 @@ export default function Home() {
                   Hi, I'm <span className="text-primary font-quicksand">TUYISHIME KENNY ARAFAT</span>
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Founder of KENNYDEV. I build exceptional digital experiences that make people's lives easier.
+                  Founder of iNkodeInc. I build exceptional digital experiences that make people's lives easier.
                   Specializing in modern web technologies and user-centric design.
                 </p>
               </div>
@@ -56,8 +56,8 @@ export default function Home() {
             <div className="flex items-center justify-center" data-aos="fade-left">
               <div className="relative h-[350px] w-[350px] overflow-hidden rounded-full border-4 border-primary/20 bg-muted p-2">
                 <Image
-                  src="/ngoma-about-img.png"
-                  alt="Benjamin Portrait"
+                  src="/inkodeInc.png"
+                  alt="iNkode Portrait"
                   fill
                   className="object-cover transition-transform duration-500 hover:scale-105"
                   priority

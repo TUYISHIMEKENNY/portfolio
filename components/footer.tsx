@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium font-quicksand">TUYISHIME KENNY ARAFAT</h3>
             <p className="text-sm text-muted-foreground">
-              Founder of KENNYDEV and full-stack developer specializing in modern web technologies and solutions.
+              Founder of iNkodeInc and full-stack developer specializing in modern web technologies and solutions.
             </p>
             <div className="flex space-x-4">
               <Link href="https://github.com/TUYISHIMEKENNY" target="_blank" rel="noopener noreferrer">
@@ -104,7 +104,7 @@ export default function Footer() {
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>© {currentYear} TUYISHIME KENNY ARAFAT . All rights reserved.</p>
           <p className="mt-1">
-            Founder of <span className="font-medium">KENNYDEV</span> - Building the web of tomorrow.
+            Founder of <span className="font-medium">iNkodeInc</span> - Building the web of tomorrow.
           </p>
         </div>
       </div>

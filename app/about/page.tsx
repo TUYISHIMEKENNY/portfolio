@@ -63,8 +63,8 @@ export default function AboutPage() {
               <p className="text-muted-foreground">
                 I'm a passionate full-stack and mobile developer with over 5
                 years of experience creating applications that don’t just work —
-                they make a difference. Also known as <strong>KENNYDEV</strong>,
-                I am <strong>Chief Technology Officer KENNYLLc </strong>
+                they make a difference. Also known as <strong>iNkodeInc</strong>,
+                I am <strong>Chief Technology Officer iNkodeInc</strong>
                 to deliver digital solutions that combine solid engineering with
                 real business value.
               </p>
@@ -144,7 +144,7 @@ export default function AboutPage() {
                     2026 - Present
                   </Badge>
                   <h3 className="text-xl font-bold">
-                    CTO (Chief Technology Officer) in KENDEv
+                    CTO (Chief Technology Officer) in iNkodeInc
                   </h3>
                   <p className="text-muted-foreground">Kigali, Rwanda</p>
                   <p>

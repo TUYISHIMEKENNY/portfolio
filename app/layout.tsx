@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: "TUYISHIME KENNY ARAFAT | Full-Stack Developer",
     template: "%s | TUYISHIME KENNY ARAFAT",
   },
-  description: "Full-stack developer and founder of 301Inc with a passion for web technologies.",
+  description: "Full-stack developer and founder of iNkode Inc with a passion for web technologies.",
   keywords: [
     "TUYISHIME KENNY ARAFAT",
     "tuyishime kenny arafat",
@@ -29,29 +29,29 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "TUYISHIME KENNY ARAFAT",
-      url: "https://ngomabenjamin.com",
+      url: "https://tuyishimekennyarafat.com",
     },
   ],
   creator: "TUYISHIME KENNY ARAFAT",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://ngomabenjamin.com",
+    url: "https://tuyishimekennyarafat.com",
     title: "TUYISHIME KENNY ARAFAT | Full-Stack Developer",
-    description: "Full-stack web developer and founder of 301Inc with a passion for web technologies.",
+    description: "Full-stack web developer and founder of iNkode Inc with a passion for web technologies.",
     siteName: "TUYISHIME KENNY ARAFAT Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "TUYISHIME KENNY ARAFAT | Full-Stack Developer",
-    description: "Full-stack web developer and founder of 301Inc with a passion for web technologies.",
+    description: "Full-stack web developer and founder of iNkode Inc with a passion for web technologies.",
     creator: "KENNY",
   },
   robots: {
     index: true,
     follow: true,
   },
-    generator: '301Inc'
+    generator: 'iNkode Inc'
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

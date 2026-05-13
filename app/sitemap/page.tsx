@@ -3,9 +3,9 @@ import type { Metadata } from "next"
 import { ArrowLeft, ChevronRight, Home, User, Briefcase, FileText, Mail, Code, Settings } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Sitemap | Ngoma Benjamin",
-  description: "Complete sitemap of Ngoma Benjamin's portfolio website.",
-  keywords: ["sitemap", "ngoma benjamin", "ngoma301", "301Inc", "website map"],
+  title: "Sitemap | tuyishime kenny arafar",
+  description: "Complete sitemap of tuyishime kenny arafat's portfolio website.",
+  keywords: ["sitemap", "tuyishime kenny arafat", "iNkodeInc", "InkodeInc", "website map"],
 }
 
 export default function SitemapPage() {
@@ -21,7 +21,7 @@ export default function SitemapPage() {
           <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Sitemap</h1>
             <p className="text-muted-foreground">
-              A complete map of all pages available on Ngoma Benjamin's portfolio website.
+              A complete map of all pages available on tuyishime kenny arafat portfolio website.
             </p>
           </div>
 

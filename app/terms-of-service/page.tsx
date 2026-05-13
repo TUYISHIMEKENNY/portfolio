@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react"
 export const metadata: Metadata = {
   title: "Terms of Service | Ngoma Benjamin",
   description: "Terms of service for Ngoma Benjamin's portfolio website and services.",
-  keywords: ["terms of service", "ngoma benjamin", "ngoma301", "301Inc", "legal terms"],
+  keywords: ["terms of service", "ngoma benjamin", "iNkodeInc", "iNkode Inc", "legal terms"],
 }
 
 export default function TermsOfServicePage() {
@@ -21,7 +21,7 @@ export default function TermsOfServicePage() {
         <div className="space-y-8">
           <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Terms of Service</h1>
-            <p className="text-muted-foreground">Last updated: April 14, 2025</p>
+            <p className="text-muted-foreground">Last updated: may 14, 2026</p>
           </div>
 
           <div className="prose prose-lg max-w-none dark:prose-invert">
@@ -63,12 +63,12 @@ export default function TermsOfServicePage() {
 
             <p>
               Your User Content must not be illegal or unlawful, must not infringe any third party's legal rights, and
-              must not be capable of giving rise to legal action whether against you or Ngoma Benjamin or a third party.
+              must not be capable of giving rise to legal action whether against you or Tuyishime kenny arafat or a third party.
             </p>
 
             <h2>Limitation of Liability</h2>
             <p>
-              Ngoma Benjamin will not be liable to you in relation to the contents of, or use of, or otherwise in
+              TUYISHIME KENNY arafat will not be liable to you in relation to the contents of, or use of, or otherwise in
               connection with, this website:
             </p>
             <ul>
