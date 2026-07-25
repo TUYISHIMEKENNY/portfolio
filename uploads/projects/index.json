@@ -5,5 +5,19 @@
     "slug": "7ba036ff-6297-4dfa-a1d1-cbf6d5f7ac9c",
     "createdAt": "2025-04-18T16:52:11.380Z",
     "updatedAt": "2025-04-18T16:54:22.299Z"
+  },
+  {
+    "id": "8df39c1e-3a9d-4e92-bc10-7ab9a9b8f2d5",
+    "title": "Screenhub",
+    "slug": "8df39c1e-3a9d-4e92-bc10-7ab9a9b8f2d5",
+    "createdAt": "2026-07-25T20:10:00.000Z",
+    "updatedAt": "2026-07-25T20:10:00.000Z"
+  },
+  {
+    "id": "5fa23d11-736b-4e08-9df2-517b6dc19cc3",
+    "title": "ILAE YES Rwanda",
+    "slug": "5fa23d11-736b-4e08-9df2-517b6dc19cc3",
+    "createdAt": "2026-07-25T20:10:00.000Z",
+    "updatedAt": "2026-07-25T20:10:00.000Z"
   }
 ]

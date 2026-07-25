@@ -1,0 +1,20 @@
+{
+  "title": "Screenhub",
+  "description": "An ultimate entertainment and pop culture fandom hub providing details on movies, TV shows, and entertainment media.",
+  "category": "frontend",
+  "imagePath": "/uploads/images/screenhub_mockup.png",
+  "liveUrl": "https://screenhub-kappa.vercel.app/",
+  "githubUrl": "",
+  "featured": true,
+  "status": "published",
+  "technologies": [
+    "React",
+    "Vite",
+    "Tailwind CSS",
+    "REST API",
+    "Framer Motion"
+  ],
+  "id": "8df39c1e-3a9d-4e92-bc10-7ab9a9b8f2d5",
+  "createdAt": "2026-07-25T20:10:00.000Z",
+  "updatedAt": "2026-07-25T20:10:00.000Z"
+}

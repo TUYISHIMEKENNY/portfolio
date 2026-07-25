@@ -1,21 +1,41 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Code, Database, Globe, Server } from "lucide-react"
+import { ArrowRight, Code, Database, Globe, Server, ExternalLink, Github } from "lucide-react"
 import AOS from "aos"
 import "aos/dist/aos.css"
 
 export default function Home() {
+  const [projects, setProjects] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     AOS.init({
       duration: 800,
       once: false,
     })
+
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch("/api/projects")
+        if (response.ok) {
+          const data = await response.json()
+          // Filter for featured projects
+          setProjects(data.filter((p: any) => p.featured))
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
   }, [])
 
   return (
@@ -132,45 +152,59 @@ export default function Home() {
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((project) => (
-              <Card key={project} className="overflow-hidden" data-aos="fade-up" data-aos-delay={project * 100}>
-                <div className="aspect-video relative">
-                  <Image
-                    src={`/workspace-bg.png`}
-                    alt={`Project ${project}`}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-bold">Project Title {project}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        A brief description of the project and the technologies used.
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="outline">React</Badge>
-                      <Badge variant="outline">Node.js</Badge>
-                      <Badge variant="outline">MongoDB</Badge>
-                    </div>
-                    <div className="flex gap-2">
-                      <Link href="#" target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline" size="sm">
-                          Live Demo
-                        </Button>
-                      </Link>
-                      <Link href="#" target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline" size="sm">
-                          GitHub
-                        </Button>
-                      </Link>
-                    </div>
+            {loading ? (
+              <div className="col-span-full flex justify-center py-12">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="col-span-full rounded-lg border p-8 text-center">
+                <h3 className="text-lg font-semibold">No featured projects found</h3>
+              </div>
+            ) : (
+              projects.slice(0, 3).map((project, index) => (
+                <Card key={project.id} className="overflow-hidden flex flex-col h-full text-left" data-aos="fade-up" data-aos-delay={index * 100}>
+                  <div className="aspect-video relative">
+                    <Image
+                      src={project.imagePath || project.image || "/placeholder.svg"}
+                      alt={project.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardContent className="p-6 flex flex-col flex-grow justify-between">
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold">{project.title}</h3>
+                        <p className="text-sm text-muted-foreground">{project.description}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {(project.technologies || []).map((tech: string, i: number) => (
+                          <Badge key={i} variant="outline">
+                            {tech}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-6">
+                      {project.liveUrl && (
+                        <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" size="sm" className="gap-1">
+                            <ExternalLink className="h-4 w-4" /> Live Demo
+                          </Button>
+                        </Link>
+                      )}
+                      {project.githubUrl && (
+                        <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" size="sm" className="gap-1">
+                            <Github className="h-4 w-4" /> GitHub
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
           <Link href="/projects" className="pt-6" data-aos="fade-up">
             <Button size="lg">
@@ -196,7 +230,7 @@ export default function Home() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <p className="italic text-muted-foreground">
-                        "Benjamin is an exceptional developer who delivered our project on time and exceeded our
+                        "Kenny is an exceptional developer who delivered our project on time and exceeded our
                         expectations. His attention to detail and problem-solving skills are impressive."
                       </p>
                       <div className="flex items-center gap-4">

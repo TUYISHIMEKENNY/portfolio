@@ -1,0 +1,20 @@
+{
+  "title": "ILAE YES Rwanda",
+  "description": "The official web platform for the Young Epilepsy Section (YES) chapter of the International League Against Epilepsy (ILAE) in Rwanda.",
+  "category": "frontend",
+  "imagePath": "/uploads/images/ilae_rwanda_mockup.png",
+  "liveUrl": "https://www.ila-eyes-rwanda.net/",
+  "githubUrl": "",
+  "featured": true,
+  "status": "published",
+  "technologies": [
+    "React",
+    "Vite",
+    "Tailwind CSS",
+    "TypeScript",
+    "Responsive Design"
+  ],
+  "id": "5fa23d11-736b-4e08-9df2-517b6dc19cc3",
+  "createdAt": "2026-07-25T20:10:00.000Z",
+  "updatedAt": "2026-07-25T20:10:00.000Z"
+}
